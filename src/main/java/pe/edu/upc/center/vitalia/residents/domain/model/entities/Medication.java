@@ -34,4 +34,7 @@ public class Medication extends AuditableModel {
         this.name = name;
         this.frequency = frequency;
     }
+
+    public void setId(long l) {
+    }
 }
