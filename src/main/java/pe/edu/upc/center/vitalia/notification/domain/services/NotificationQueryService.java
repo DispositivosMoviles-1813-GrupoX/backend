@@ -1,6 +1,6 @@
 package pe.edu.upc.center.vitalia.notification.domain.services;
 
-import pe.edu.upc.center.agecare.notification.domain.model.aggregates.Notification;
+import pe.edu.upc.center.vitalia.notification.domain.model.aggregates.Notification;
 
 import java.util.List;
 import java.util.Optional;
