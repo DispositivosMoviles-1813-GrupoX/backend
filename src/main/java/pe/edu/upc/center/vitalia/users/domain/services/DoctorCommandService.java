@@ -1,10 +1,10 @@
 package pe.edu.upc.center.vitalia.users.domain.services;
 
-import pe.edu.upc.center.agecare.users.domain.model.aggregates.Doctor;
-import pe.edu.upc.center.agecare.users.interfaces.rest.resources.AddressResource;
-import pe.edu.upc.center.agecare.users.interfaces.rest.resources.ScheduleResource;
-import pe.edu.upc.center.agecare.users.interfaces.rest.resources.UpdateDoctorResource;
-import pe.edu.upc.center.agecare.users.interfaces.rest.resources.UpdateScheduleResource;
+import pe.edu.upc.center.vitalia.users.domain.model.aggregates.Doctor;
+import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.AddressResource;
+import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.ScheduleResource;
+import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.UpdateDoctorResource;
+import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.UpdateScheduleResource;
 
 public interface DoctorCommandService {
     Doctor createDoctor(Doctor doctor);
