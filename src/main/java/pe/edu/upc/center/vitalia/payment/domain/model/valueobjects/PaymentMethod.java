@@ -1,4 +1,4 @@
-package pe.edu.upc.center.agecare.payment.domain.model.valueobjects;
+package pe.edu.upc.center.vitalia.payment.domain.model.valueobjects;
 
 import jakarta.persistence.Embeddable;
 

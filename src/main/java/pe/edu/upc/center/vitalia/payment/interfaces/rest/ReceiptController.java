@@ -1,23 +1,23 @@
-package pe.edu.upc.center.agecare.payment.interfaces.rest;
+package pe.edu.upc.center.vitalia.payment.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.upc.center.agecare.payment.domain.model.commands.DeleteReceiptCommand;
-import pe.edu.upc.center.agecare.payment.domain.model.queries.GetAllReceiptsQuery;
-import pe.edu.upc.center.agecare.payment.domain.model.queries.GetReceiptsByResidentIdQuery;
-import pe.edu.upc.center.agecare.payment.domain.model.queries.GetReceiptByDateQuery;
-import pe.edu.upc.center.agecare.payment.domain.model.queries.GetReceiptByReceiptIdQuery;
-import pe.edu.upc.center.agecare.payment.domain.model.valueobjects.ResidentId;
-import pe.edu.upc.center.agecare.payment.domain.services.ReceiptQueryService;
-import pe.edu.upc.center.agecare.payment.domain.services.ReceiptCommandService;
-import pe.edu.upc.center.agecare.payment.interfaces.rest.resources.CreateReceiptResource;
-import pe.edu.upc.center.agecare.payment.interfaces.rest.resources.ReceiptResource;
-import pe.edu.upc.center.agecare.payment.interfaces.rest.transform.CreateReceiptCommandFromResourceAssembler;
-import pe.edu.upc.center.agecare.payment.interfaces.rest.transform.ReceiptResourceFromEntityAssembler;
-import pe.edu.upc.center.agecare.payment.interfaces.rest.transform.UpdateReceiptCommandFromResourceAssembler;
+import pe.edu.upc.center.vitalia.payment.domain.model.commands.DeleteReceiptCommand;
+import pe.edu.upc.center.vitalia.payment.domain.model.queries.GetAllReceiptsQuery;
+import pe.edu.upc.center.vitalia.payment.domain.model.queries.GetReceiptsByResidentIdQuery;
+import pe.edu.upc.center.vitalia.payment.domain.model.queries.GetReceiptByDateQuery;
+import pe.edu.upc.center.vitalia.payment.domain.model.queries.GetReceiptByReceiptIdQuery;
+import pe.edu.upc.center.vitalia.payment.domain.model.valueobjects.ResidentId;
+import pe.edu.upc.center.vitalia.payment.domain.services.ReceiptQueryService;
+import pe.edu.upc.center.vitalia.payment.domain.services.ReceiptCommandService;
+import pe.edu.upc.center.vitalia.payment.interfaces.rest.resources.CreateReceiptResource;
+import pe.edu.upc.center.vitalia.payment.interfaces.rest.resources.ReceiptResource;
+import pe.edu.upc.center.vitalia.payment.interfaces.rest.transform.CreateReceiptCommandFromResourceAssembler;
+import pe.edu.upc.center.vitalia.payment.interfaces.rest.transform.ReceiptResourceFromEntityAssembler;
+import pe.edu.upc.center.vitalia.payment.interfaces.rest.transform.UpdateReceiptCommandFromResourceAssembler;
 
 
 import java.util.Date;

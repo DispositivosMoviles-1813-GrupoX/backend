@@ -1,8 +1,8 @@
-package pe.edu.upc.center.agecare.payment.interfaces.rest.transform;
+package pe.edu.upc.center.vitalia.payment.interfaces.rest.transform;
 
-import pe.edu.upc.center.agecare.payment.domain.model.commands.UpdateReceiptCommand;
-import pe.edu.upc.center.agecare.payment.domain.model.valueobjects.ResidentId;
-import pe.edu.upc.center.agecare.payment.interfaces.rest.resources.ReceiptResource;
+import pe.edu.upc.center.vitalia.payment.domain.model.commands.UpdateReceiptCommand;
+import pe.edu.upc.center.vitalia.payment.domain.model.valueobjects.ResidentId;
+import pe.edu.upc.center.vitalia.payment.interfaces.rest.resources.ReceiptResource;
 
 public class UpdateReceiptCommandFromResourceAssembler {
     public static UpdateReceiptCommand toCommandFromResource(Long receiptId, ReceiptResource resource) {

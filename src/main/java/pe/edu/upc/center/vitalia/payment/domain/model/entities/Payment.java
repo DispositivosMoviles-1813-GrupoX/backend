@@ -1,13 +1,13 @@
-package pe.edu.upc.center.agecare.payment.domain.model.entities;
+package pe.edu.upc.center.vitalia.payment.domain.model.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pe.edu.upc.center.agecare.payment.domain.model.valueobjects.PaymentMethod;
-import pe.edu.upc.center.agecare.payment.domain.model.aggregates.Receipt;
-import pe.edu.upc.center.agecare.shared.domain.entities.AuditableModel;
+import pe.edu.upc.center.vitalia.payment.domain.model.valueobjects.PaymentMethod;
+import pe.edu.upc.center.vitalia.payment.domain.model.aggregates.Receipt;
+import pe.edu.upc.center.vitalia.shared.domain.entities.AuditableModel;
 
 
 import java.util.Date;

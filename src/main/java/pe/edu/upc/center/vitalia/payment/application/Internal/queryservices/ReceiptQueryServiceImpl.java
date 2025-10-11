@@ -1,14 +1,14 @@
-package pe.edu.upc.center.agecare.payment.application.Internal.queryservices;
+package pe.edu.upc.center.vitalia.payment.application.Internal.queryservices;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.center.agecare.payment.domain.model.aggregates.Receipt;
-import pe.edu.upc.center.agecare.payment.domain.model.valueobjects.ResidentId;
-import pe.edu.upc.center.agecare.payment.domain.model.queries.GetAllReceiptsQuery;
-import pe.edu.upc.center.agecare.payment.domain.model.queries.GetReceiptByDateQuery;
-import pe.edu.upc.center.agecare.payment.domain.model.queries.GetReceiptByReceiptIdQuery;
-import pe.edu.upc.center.agecare.payment.domain.model.queries.GetReceiptsByResidentIdQuery;
-import pe.edu.upc.center.agecare.payment.domain.services.ReceiptQueryService;
-import pe.edu.upc.center.agecare.payment.infrastructure.persistence.jpa.repositories.ReceiptRepository;
+import pe.edu.upc.center.vitalia.payment.domain.model.aggregates.Receipt;
+import pe.edu.upc.center.vitalia.payment.domain.model.valueobjects.ResidentId;
+import pe.edu.upc.center.vitalia.payment.domain.model.queries.GetAllReceiptsQuery;
+import pe.edu.upc.center.vitalia.payment.domain.model.queries.GetReceiptByDateQuery;
+import pe.edu.upc.center.vitalia.payment.domain.model.queries.GetReceiptByReceiptIdQuery;
+import pe.edu.upc.center.vitalia.payment.domain.model.queries.GetReceiptsByResidentIdQuery;
+import pe.edu.upc.center.vitalia.payment.domain.services.ReceiptQueryService;
+import pe.edu.upc.center.vitalia.payment.infrastructure.persistence.jpa.repositories.ReceiptRepository;
 
 import java.util.List;
 import java.util.Optional;

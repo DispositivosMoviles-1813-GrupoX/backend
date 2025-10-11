@@ -1,13 +1,13 @@
-package pe.edu.upc.center.agecare.payment.domain.model.aggregates;
+package pe.edu.upc.center.vitalia.payment.domain.model.aggregates;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pe.edu.upc.center.agecare.payment.domain.model.commands.CreateReceiptCommand;
-import pe.edu.upc.center.agecare.payment.domain.model.valueobjects.ResidentId;
-import pe.edu.upc.center.agecare.shared.domain.aggregates.AuditableAbstractAggregateRoot;
+import pe.edu.upc.center.vitalia.payment.domain.model.commands.CreateReceiptCommand;
+import pe.edu.upc.center.vitalia.payment.domain.model.valueobjects.ResidentId;
+import pe.edu.upc.center.vitalia.shared.domain.aggregates.AuditableAbstractAggregateRoot;
 
 import java.util.Date;
 

@@ -1,9 +1,9 @@
-package pe.edu.upc.center.agecare.payment.infrastructure.persistence.jpa.repositories;
+package pe.edu.upc.center.vitalia.payment.infrastructure.persistence.jpa.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pe.edu.upc.center.agecare.payment.domain.model.aggregates.Receipt;
-import pe.edu.upc.center.agecare.payment.domain.model.valueobjects.ResidentId;
+import pe.edu.upc.center.vitalia.payment.domain.model.aggregates.Receipt;
+import pe.edu.upc.center.vitalia.payment.domain.model.valueobjects.ResidentId;
 
 import java.util.List;
 import java.util.Date;

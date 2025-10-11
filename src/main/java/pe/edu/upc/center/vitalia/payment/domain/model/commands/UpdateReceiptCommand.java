@@ -1,6 +1,6 @@
-package pe.edu.upc.center.agecare.payment.domain.model.commands;
+package pe.edu.upc.center.vitalia.payment.domain.model.commands;
 
-import pe.edu.upc.center.agecare.payment.domain.model.valueobjects.ResidentId;
+import pe.edu.upc.center.vitalia.payment.domain.model.valueobjects.ResidentId;
 import java.util.Date;
 
 public record UpdateReceiptCommand(

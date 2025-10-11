@@ -1,4 +1,4 @@
-package pe.edu.upc.center.agecare.payment.domain.model.queries;
+package pe.edu.upc.center.vitalia.payment.domain.model.queries;
 
 public record GetAllReceiptsQuery() {
 }
