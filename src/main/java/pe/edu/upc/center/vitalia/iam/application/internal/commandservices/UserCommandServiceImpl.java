@@ -8,6 +8,7 @@ import pe.edu.upc.center.vitalia.iam.application.internal.outboundservices.token
 import pe.edu.upc.center.vitalia.iam.domain.model.aggregates.User;
 import pe.edu.upc.center.vitalia.iam.domain.model.commands.SignInCommand;
 import pe.edu.upc.center.vitalia.iam.domain.model.commands.SignUpCommand;
+import pe.edu.upc.center.vitalia.iam.domain.model.entities.Role;
 import pe.edu.upc.center.vitalia.iam.domain.services.UserCommandService;
 import pe.edu.upc.center.vitalia.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import pe.edu.upc.center.vitalia.iam.infrastructure.persistence.jpa.repositories.UserRepository;
@@ -90,7 +91,8 @@ public class UserCommandServiceImpl implements UserCommandService {
     var event = new UserCreatedEvent(
         user.getId(),
         user.getUsername(),
-        user.getEmailAddress());
+        user.getEmailAddress(),
+        user.getRoles().stream().map(Role::getStringName).toList());
 
     publisher.publishEvent(event);
 
