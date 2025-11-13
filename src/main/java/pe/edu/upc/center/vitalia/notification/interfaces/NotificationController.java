@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.center.vitalia.notification.domain.model.commands.DeleteNotificationCommand;
 import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetAllNotificationsQuery;
+import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByStatus;
+import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByUserIdQuery;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationCommandService;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationQueryService;
 import pe.edu.upc.center.vitalia.notification.interfaces.resources.CreateNotificationResource;
@@ -43,17 +45,29 @@ public class NotificationController {
     return ResponseEntity.ok(notificationsResources);
   }
 
-//  @GetMapping("/search")
-//  @Operation(summary = "Filter notifications by status", description = "Retrieve notifications filtered by status (read, unread, archived)")
-//  public List<NotificationDTO> searchNotifications(@RequestParam String status) {
-//    return notificationService.searchNotifications(status);
-//  }
-//
-//  @GetMapping("/notifications/{userId}")
-//  @Operation(summary = "List notifications by user", description = "Retrieve notifications for a specific user by user ID")
-//  public List<NotificationDTO> getNotificationsByUserId(@PathVariable String userId) {
-//    return notificationService.getNotificationsByUserId(userId);
-//  }
+  @GetMapping("/search")
+  @Operation(summary = "Filter notifications by status", description = "Retrieve notifications filtered by status (read, unread, archived)")
+  public ResponseEntity<List<NotificationResource>> searchNotifications(@RequestParam String status) {
+    var getNotificationsByStatusQuery = new GetNotificationsByStatus(status);
+    var notifications = notificationQueryService.handle(getNotificationsByStatusQuery);
+    var notificationsResources = notifications.stream()
+        .map(NotificationResourceFromEntityAssembler::toResourceFromEntity)
+        .collect(Collectors.toList());
+
+    return ResponseEntity.ok(notificationsResources);
+  }
+
+  @GetMapping("/userId/{userId}")
+  @Operation(summary = "List notifications by user", description = "Retrieve notifications for a specific user by user ID")
+  public ResponseEntity<List<NotificationResource>> getNotificationsByUserId(@PathVariable Long userId) {
+    var getNotificationsByUserIdQuery = new GetNotificationsByUserIdQuery(userId);
+    var notifications = notificationQueryService.handle(getNotificationsByUserIdQuery);
+    var notificationsResources = notifications.stream()
+        .map(NotificationResourceFromEntityAssembler::toResourceFromEntity)
+        .collect(Collectors.toList());
+
+    return ResponseEntity.ok(notificationsResources);
+  }
 
   @PostMapping
   @Operation(summary = "Create a notification", description = "Create a new notification")
