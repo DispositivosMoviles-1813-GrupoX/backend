@@ -1,5 +1,8 @@
 package pe.edu.upc.center.vitalia.notification.interfaces.resources;
 
-public class NotificationResource {
-    // Resource for notifications
+public record NotificationResource(Long id,
+                                   String title,
+                                   String content,
+                                   String status,
+                                   Long userId) {
 }
