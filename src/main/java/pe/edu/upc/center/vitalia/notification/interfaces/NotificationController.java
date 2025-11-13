@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.center.vitalia.notification.domain.model.commands.DeleteNotificationCommand;
+import pe.edu.upc.center.vitalia.notification.domain.model.commands.UpdateStatusToArchivedCommand;
+import pe.edu.upc.center.vitalia.notification.domain.model.commands.UpdateStatusToReadCommand;
 import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetAllNotificationsQuery;
 import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByStatus;
 import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByUserIdQuery;
@@ -82,23 +84,33 @@ public class NotificationController {
     return new ResponseEntity<>(notificationResource, HttpStatus.CREATED);
   }
 
-//  @PostMapping("/{id}/mark-as-read")
-//  @Operation(summary = "Mark notification as read", description = "Mark a specific notification as read by its ID")
-//  public NotificationDTO markAsRead(@PathVariable String id) {
-//        return notificationService.markAsRead(id);
-//    }
-//
-//  @PostMapping("/{id}/archive")
-//  @Operation(summary = "Archive a notification", description = "Archive a specific notification by its ID")
-//  public NotificationDTO archiveNotification(@PathVariable String id) {
-//    return notificationService.archiveNotification(id);
-//  }
-//
-//  @PostMapping("/{id}/unarchive")
-//  @Operation(summary = "Unarchive a notification", description = "Unarchive a specific notification by its ID, changing its status to 'read'")
-//  public NotificationDTO unarchiveNotification(@PathVariable String id) {
-//    return notificationService.markAsRead(id);
-//  }
+  @PostMapping("/{id}/mark-as-read")
+  @Operation(summary = "Mark notification as read", description = "Mark a specific notification as read by its ID")
+  public ResponseEntity<NotificationResource> markAsRead(@PathVariable Long id) {
+    var updateStatusToReadCommand = new UpdateStatusToReadCommand(id);
+    var notification = notificationCommandService.handle(updateStatusToReadCommand);
+    if (notification.isEmpty()) {
+      return ResponseEntity.badRequest().build();
+    }
+
+    var notificationResource = NotificationResourceFromEntityAssembler.toResourceFromEntity(notification.get());
+
+    return new ResponseEntity<>(notificationResource, HttpStatus.OK);
+  }
+
+  @PostMapping("/{id}/archive")
+  @Operation(summary = "Archive a notification", description = "Archive a specific notification by its ID")
+  public ResponseEntity<NotificationResource> archiveNotification(@PathVariable Long id) {
+    var updatedStatusToArchivedCommand = new UpdateStatusToArchivedCommand(id);
+    var notification = notificationCommandService.handle(updatedStatusToArchivedCommand);
+    if (notification.isEmpty()) {
+      return ResponseEntity.badRequest().build();
+    }
+
+    var notificationResource = NotificationResourceFromEntityAssembler.toResourceFromEntity(notification.get());
+
+    return new ResponseEntity<>(notificationResource, HttpStatus.OK);
+  }
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Delete a notification", description = "Delete a specific notification by its ID")

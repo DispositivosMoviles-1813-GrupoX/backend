@@ -36,4 +36,12 @@ public class Notification extends AuditableAbstractAggregateRoot<Notification> {
     this.userId = new UserId(command.userId());
     this.notificationStatus = NotificationStatus.UNREAD;
   }
+
+  public void markAsRead() {
+    this.notificationStatus = NotificationStatus.READ;
+  }
+
+  public void markAsArchived() {
+    this.notificationStatus = NotificationStatus.ARCHIVED;
+  }
 }

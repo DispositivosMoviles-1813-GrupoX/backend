@@ -3,9 +3,7 @@ package pe.edu.upc.center.vitalia.notification.application.internal.commandservi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.notification.domain.model.aggregates.Notification;
-import pe.edu.upc.center.vitalia.notification.domain.model.commands.CreateNotificationCommand;
-import pe.edu.upc.center.vitalia.notification.domain.model.commands.DeleteNotificationCommand;
-import pe.edu.upc.center.vitalia.notification.domain.model.commands.UpdateNotificationCommand;
+import pe.edu.upc.center.vitalia.notification.domain.model.commands.*;
 import pe.edu.upc.center.vitalia.notification.domain.model.exceptions.NotificationNotFoundException;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationCommandService;
 import pe.edu.upc.center.vitalia.notification.infrastructure.persistence.jpa.repositories.NotificationRepository;
@@ -45,5 +43,35 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
 
     notificationRepository.deleteById(notificationId);
 
+  }
+
+  @Override
+  public Optional<Notification> handle(UpdateStatusToReadCommand command) {
+    var notificationId = command.notificationId();
+    var notification = notificationRepository.findById(notificationId);
+    if (notification.isEmpty()) {
+      throw new IllegalArgumentException("Notification with id " + notificationId + " does not exist");
+    }
+
+    var updatedNotification = notification.get();
+    updatedNotification.markAsRead();
+    notificationRepository.save(updatedNotification);
+
+    return Optional.of(updatedNotification);
+  }
+
+  @Override
+  public Optional<Notification> handle(UpdateStatusToArchivedCommand command) {
+    var notificationId = command.notificationId();
+    var notification = notificationRepository.findById(notificationId);
+    if (notification.isEmpty()) {
+      throw new IllegalArgumentException("Notification with id " + notificationId + " does not exist");
+    }
+
+    var updatedNotification = notification.get();
+    updatedNotification.markAsArchived();
+    notificationRepository.save(updatedNotification);
+
+    return Optional.of(updatedNotification);
   }
 }
