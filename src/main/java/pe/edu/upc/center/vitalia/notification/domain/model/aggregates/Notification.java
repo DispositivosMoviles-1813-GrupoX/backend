@@ -16,8 +16,14 @@ import pe.edu.upc.center.vitalia.shared.domain.aggregates.AuditableAbstractAggre
 @NoArgsConstructor
 public class Notification extends AuditableAbstractAggregateRoot<Notification> {
 
+  @Column(nullable = false, length = 500)
   private String title;
+
+  @Column(nullable = false, columnDefinition = "TEXT")
   private String content;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
   private NotificationStatus notificationStatus;
 
   @Embedded
@@ -35,6 +41,18 @@ public class Notification extends AuditableAbstractAggregateRoot<Notification> {
     this.content = command.content();
     this.userId = new UserId(command.userId());
     this.notificationStatus = NotificationStatus.UNREAD;
+  }
+
+  private void validateFields(String title, String content, Long userId) {
+    if (title == null || title.trim().isEmpty()) {
+      throw new IllegalArgumentException("Title cannot be null or empty");
+    }
+    if (content == null || content.trim().isEmpty()) {
+      throw new IllegalArgumentException("Content cannot be null or empty");
+    }
+    if (userId == null) {
+      throw new IllegalArgumentException("User ID cannot be null");
+    }
   }
 
   public void markAsRead() {

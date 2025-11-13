@@ -1,17 +1,16 @@
 package pe.edu.upc.center.vitalia.notification.application.internal.commandservices;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.notification.domain.model.aggregates.Notification;
 import pe.edu.upc.center.vitalia.notification.domain.model.commands.*;
-import pe.edu.upc.center.vitalia.notification.domain.model.exceptions.NotificationNotFoundException;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationCommandService;
 import pe.edu.upc.center.vitalia.notification.infrastructure.persistence.jpa.repositories.NotificationRepository;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class NotificationCommandServiceImpl implements NotificationCommandService {
 
   private final NotificationRepository notificationRepository;
