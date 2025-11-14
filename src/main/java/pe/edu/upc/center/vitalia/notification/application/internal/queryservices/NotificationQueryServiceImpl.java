@@ -3,10 +3,7 @@ package pe.edu.upc.center.vitalia.notification.application.internal.queryservice
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.notification.domain.model.aggregates.Notification;
-import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetAllNotificationsQuery;
-import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationByIdQuery;
-import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByStatus;
-import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByUserIdQuery;
+import pe.edu.upc.center.vitalia.notification.domain.model.queries.*;
 import pe.edu.upc.center.vitalia.notification.domain.model.valueobjects.NotificationStatus;
 import pe.edu.upc.center.vitalia.notification.domain.model.valueobjects.UserId;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationQueryService;
@@ -44,5 +41,13 @@ public class NotificationQueryServiceImpl implements NotificationQueryService {
   public List<Notification> handle(GetNotificationsByStatus query) {
     var status = NotificationStatus.valueOf(query.status().toUpperCase());
     return notificationRepository.findByNotificationStatus(status);
+  }
+
+  @Override
+  public List<Notification> handle(GetNotificationsByUserIdAndStatusQuery query) {
+    var userId = new UserId(query.userId());
+    var status = NotificationStatus.valueOf(query.status().toUpperCase());
+
+    return notificationRepository.findByUserIdAndNotificationStatus(userId, status);
   }
 }
