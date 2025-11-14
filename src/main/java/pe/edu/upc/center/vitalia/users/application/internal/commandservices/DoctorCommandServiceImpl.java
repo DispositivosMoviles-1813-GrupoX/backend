@@ -1,7 +1,9 @@
 package pe.edu.upc.center.vitalia.users.application.internal.commandservices;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.center.vitalia.shared.domain.events.DoctorCreatedEvent;
 import pe.edu.upc.center.vitalia.users.domain.model.aggregates.Doctor;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.Address;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.ContactInfo;
@@ -18,14 +20,27 @@ import pe.edu.upc.center.vitalia.users.interfaces.rest.transform.DoctorResourceA
 public class DoctorCommandServiceImpl implements DoctorCommandService {
 
     private final DoctorRepository doctorRepository;
+  private final ApplicationEventPublisher publisher;
 
-    public DoctorCommandServiceImpl(DoctorRepository doctorRepository) {
+    public DoctorCommandServiceImpl(DoctorRepository doctorRepository,
+                                    ApplicationEventPublisher publisher) {
         this.doctorRepository = doctorRepository;
+        this.publisher = publisher;
     }
 
     @Override
     public Doctor createDoctor(Doctor doctor) {
-        return doctorRepository.save(doctor);
+      Doctor savedDoctor = doctorRepository.save(doctor);
+
+      var event = new DoctorCreatedEvent(
+          savedDoctor.getLicenseNumber(),
+          savedDoctor.getSpecialty(),
+          savedDoctor.getFullName().getFirstName(),
+          savedDoctor.getFullName().getLastName(),
+          savedDoctor.getId());
+      publisher.publishEvent(event);
+
+      return savedDoctor;
     }
     @Override
     public Doctor assignShift(Long doctorId, String day, String startTime, String endTime, Long appointmentId) {

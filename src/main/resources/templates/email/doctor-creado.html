@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Registrado</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 30px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 28px 35px;
+            max-width: 650px;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-left: 6px solid #28a745; /* Verde principal */
+        }
+        h2 {
+            color: #28a745; /* Verde */
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        p {
+            color: #444;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .label {
+            font-weight: bold;
+            color: #28a745; /* Verde */
+        }
+        .info-box {
+            background: #e8f5e9; /* Verde muy suave */
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #c8e6c9;
+        }
+        .footer {
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h2>Nuevo Doctor Registrado 👨‍⚕️💚</h2>
+
+    <p>
+        Se ha registrado un nuevo doctor en el sistema:
+    </p>
+
+    <div class="info-box">
+        <p><span class="label">Nombre:</span> [[${firstName}]] [[${lastName}]]</p>
+        <p><span class="label">Especialidad:</span> [[${specialty}]]</p>
+        <p><span class="label">Número de colegiatura:</span> [[${licenseNumber}]]</p>
+        <p><span class="label">ID del doctor:</span> [[${doctorId}]]</p>
+    </div>
+
+    <p>
+        Ahora forma parte del equipo médico de <strong>Vitalia</strong>.
+        Puedes gestionar su información desde la plataforma.
+    </p>
+
+    <div class="footer">
+        © 2025 Vitalia — Sistema de Gestión Médica.
+        Todos los derechos reservados.
+    </div>
+</div>
+</body>
+</html>

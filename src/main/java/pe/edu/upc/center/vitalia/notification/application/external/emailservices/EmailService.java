@@ -48,4 +48,33 @@ public class EmailService {
 
     System.out.println("✅ Correo de bienvenida enviado a " + to);
   }
+
+  public void sendDoctorCreatedEmail(String to,
+                                     String firstname,
+                                     String lastname,
+                                     String speciality,
+                                     String licenseNumber,
+                                     Long doctorId) throws MessagingException {
+
+    Context context = new Context();
+    context.setVariable("firstName", firstname);
+    context.setVariable("lastName", lastname);
+    context.setVariable("specialty", speciality);
+    context.setVariable("licenseNumber", licenseNumber);
+    context.setVariable("doctorId", doctorId.toString());
+
+    String templateName = "email/doctor-creado";
+    String htmlContent = templateEngine.process(templateName, context);
+    MimeMessage mimeMessage = mailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+    helper.setTo(to);
+    helper.setSubject("Nuevo Doctor Registrado: Dr. " + firstname + " " + lastname);
+    helper.setText(htmlContent, true); // Activar HTML
+
+    mailSender.send(mimeMessage);
+    System.out.println("✅ Correo de registro de doctor enviado a " + to +
+        " (Doctor: " + firstname + " " + lastname + ")");
+
+  }
 }
