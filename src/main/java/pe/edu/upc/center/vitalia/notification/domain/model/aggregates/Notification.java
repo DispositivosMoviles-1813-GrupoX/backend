@@ -1,79 +1,65 @@
 package pe.edu.upc.center.vitalia.notification.domain.model.aggregates;
 
 import  jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import pe.edu.upc.center.vitalia.notification.domain.model.commands.CreateNotificationCommand;
+import pe.edu.upc.center.vitalia.notification.domain.model.valueobjects.NotificationStatus;
+import pe.edu.upc.center.vitalia.notification.domain.model.valueobjects.UserId;
+import pe.edu.upc.center.vitalia.shared.domain.aggregates.AuditableAbstractAggregateRoot;
 
-import java.time.LocalDateTime;
-
+@Setter
+@Getter
 @Entity
 @Table(name = "notifications")
 @NoArgsConstructor
-public class Notification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String title; // New field for frontend compatibility
-    private String content;
-    private LocalDateTime createdAt; // Renamed from timestamp
-    private LocalDateTime updatedAt; // Add this field
+public class Notification extends AuditableAbstractAggregateRoot<Notification> {
 
-    @Column(nullable = false) // Ensure this column is not nullable
-    private LocalDateTime timestamp;
+  @Column(nullable = false, length = 500)
+  private String title;
 
-    private String status; // Ensure this field exists
-    private Long userId; // Ensure this field exists
-    private Long recipientId; // Ensure this field exists
+  @Column(nullable = false, columnDefinition = "TEXT")
+  private String content;
 
-    @Column(nullable = false)
-    private String type; // Ensure this field exists
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private NotificationStatus notificationStatus;
 
-    // Constructor
-    public Notification(Long id, String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt, String status, Long userId, Long recipientId, String type) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt; // Initialize this field
-        this.timestamp = LocalDateTime.now(); // Initialize this field
-        this.status = status;
-        this.userId = userId;
-        this.recipientId = recipientId;
-        this.type = type;
+  @Embedded
+  private UserId userId;
+
+  public Notification(String title, String content, Long userId) {
+    this.title = title;
+    this.content = content;
+    this.userId = new UserId(userId);
+    this.notificationStatus = NotificationStatus.UNREAD;
+  }
+
+  public Notification(CreateNotificationCommand command) {
+    this.title = command.title();
+    this.content = command.content();
+    this.userId = new UserId(command.userId());
+    this.notificationStatus = NotificationStatus.UNREAD;
+  }
+
+  private void validateFields(String title, String content, Long userId) {
+    if (title == null || title.trim().isEmpty()) {
+      throw new IllegalArgumentException("Title cannot be null or empty");
     }
-
-    // Additional constructor
-    public Notification(String title, String content, Long userId, Long recipientId, String type) {
-        this.title = title;
-        this.content = content;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        this.timestamp = LocalDateTime.now(); // Initialize timestamp here
-        this.status = "unread";
-        this.userId = userId;
-        this.recipientId = recipientId;
-        this.type = type;
+    if (content == null || content.trim().isEmpty()) {
+      throw new IllegalArgumentException("Content cannot be null or empty");
     }
+    if (userId == null) {
+      throw new IllegalArgumentException("User ID cannot be null");
+    }
+  }
 
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-    public Long getRecipientId() { return recipientId; }
-    public void setRecipientId(Long recipientId) { this.recipientId = recipientId; }
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-    // Other getters and setters omitted for brevity
+  public void markAsRead() {
+    this.notificationStatus = NotificationStatus.READ;
+  }
+
+  public void markAsArchived() {
+    this.notificationStatus = NotificationStatus.ARCHIVED;
+  }
 }

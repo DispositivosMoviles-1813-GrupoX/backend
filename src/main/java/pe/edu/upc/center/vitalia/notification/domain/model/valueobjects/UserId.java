@@ -1,26 +1,16 @@
 package pe.edu.upc.center.vitalia.notification.domain.model.valueobjects;
 
-public class UserId {
-    private final long userId;
+import jakarta.persistence.Embeddable;
 
-    public UserId(long userId) {
-        this.userId = userId;
+@Embeddable
+public record UserId (Long userId) {
+  public UserId {
+    if (userId < 0) {
+      throw new IllegalArgumentException("Profile profileId cannot be negative");
     }
+  }
 
-    public long getUserId() {
-        return userId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserId userId1 = (UserId) o;
-        return userId == userId1.userId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Long.hashCode(userId);
-    }
+  public UserId() {
+    this(0L);
+  }
 }

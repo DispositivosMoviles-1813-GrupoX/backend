@@ -1,3 +1,4 @@
 package pe.edu.upc.center.vitalia.notification.domain.model.queries;
 
-public record GetAllNotificationsQuery() {}
+public record GetNotificationsByStatus(String status) {
+}
