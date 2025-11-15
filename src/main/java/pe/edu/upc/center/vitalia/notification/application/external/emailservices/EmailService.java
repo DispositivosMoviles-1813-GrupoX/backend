@@ -2,6 +2,7 @@ package pe.edu.upc.center.vitalia.notification.application.external.emailservice
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ import org.thymeleaf.context.Context;
 public class EmailService {
   private final JavaMailSender mailSender;
   private final TemplateEngine templateEngine;
+
+  @Value("${spring.mail.from}")
+  private String from;
 
   public EmailService(JavaMailSender mailSender,
                       TemplateEngine templateEngine) {
@@ -42,6 +46,7 @@ public class EmailService {
     helper.setTo(to);
     helper.setSubject("¡Bienvenido a MiApp, " + username + "! 🎉");
     helper.setText(htmlContent, true); // Activar HTML
+    helper.setFrom(from);
 
     // Enviar correo
     mailSender.send(mimeMessage);
@@ -71,6 +76,7 @@ public class EmailService {
     helper.setTo(to);
     helper.setSubject("Nuevo Doctor Registrado: Dr. " + firstname + " " + lastname);
     helper.setText(htmlContent, true); // Activar HTML
+    helper.setFrom(from);
 
     mailSender.send(mimeMessage);
     System.out.println("✅ Correo de registro de doctor enviado a " + to +
