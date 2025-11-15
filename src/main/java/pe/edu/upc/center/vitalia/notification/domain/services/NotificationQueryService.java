@@ -1,10 +1,7 @@
 package pe.edu.upc.center.vitalia.notification.domain.services;
 
 import pe.edu.upc.center.vitalia.notification.domain.model.aggregates.Notification;
-import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetAllNotificationsQuery;
-import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationByIdQuery;
-import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByStatus;
-import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByUserIdQuery;
+import pe.edu.upc.center.vitalia.notification.domain.model.queries.*;
 import pe.edu.upc.center.vitalia.notification.domain.model.valueobjects.NotificationStatus;
 
 import java.util.List;
@@ -15,4 +12,5 @@ public interface NotificationQueryService {
   Optional<Notification> handle(GetNotificationByIdQuery query);
   List<Notification> handle(GetNotificationsByUserIdQuery query);
   List<Notification> handle(GetNotificationsByStatus query);
+  List<Notification> handle(GetNotificationsByUserIdAndStatusQuery query);
 }

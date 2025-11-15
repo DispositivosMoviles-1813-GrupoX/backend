@@ -10,6 +10,7 @@ import pe.edu.upc.center.vitalia.notification.domain.model.commands.UpdateStatus
 import pe.edu.upc.center.vitalia.notification.domain.model.commands.UpdateStatusToReadCommand;
 import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetAllNotificationsQuery;
 import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByStatus;
+import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByUserIdAndStatusQuery;
 import pe.edu.upc.center.vitalia.notification.domain.model.queries.GetNotificationsByUserIdQuery;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationCommandService;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationQueryService;
@@ -64,6 +65,20 @@ public class NotificationController {
   public ResponseEntity<List<NotificationResource>> getNotificationsByUserId(@PathVariable Long userId) {
     var getNotificationsByUserIdQuery = new GetNotificationsByUserIdQuery(userId);
     var notifications = notificationQueryService.handle(getNotificationsByUserIdQuery);
+    var notificationsResources = notifications.stream()
+        .map(NotificationResourceFromEntityAssembler::toResourceFromEntity)
+        .collect(Collectors.toList());
+
+    return ResponseEntity.ok(notificationsResources);
+  }
+
+  @GetMapping("/userId/{userId}/status")
+  @Operation(summary = "List notifications by user and status", description = "Retrieve notifications for a specific user by user ID and status")
+  public ResponseEntity<List<NotificationResource>> getNotificationsByUserIdAndStatus(
+      @PathVariable Long userId,
+      @RequestParam String status) {
+    var getNotificationsByUserIdAndStatusQuery = new GetNotificationsByUserIdAndStatusQuery(userId, status);
+    var notifications = notificationQueryService.handle(getNotificationsByUserIdAndStatusQuery);
     var notificationsResources = notifications.stream()
         .map(NotificationResourceFromEntityAssembler::toResourceFromEntity)
         .collect(Collectors.toList());
