@@ -12,6 +12,7 @@ import pe.edu.upc.center.vitalia.notification.domain.model.commands.CreateNotifi
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationCommandService;
 import pe.edu.upc.center.vitalia.shared.domain.events.UserCreatedEvent;
 
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -51,7 +52,7 @@ public class IamEventHandler {
         System.err.println(" No se pudo crear la notificación");
       }
 
-    } catch (MessagingException e) {
+    } catch (IOException e) {
       System.err.println("Error al enviar correo de bienvenida: " + e.getMessage());
     } catch (Exception e) {
       System.err.println("Error al crear notificación: " + e.getMessage());
