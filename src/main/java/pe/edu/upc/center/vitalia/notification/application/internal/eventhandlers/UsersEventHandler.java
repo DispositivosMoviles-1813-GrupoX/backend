@@ -8,6 +8,7 @@ import pe.edu.upc.center.vitalia.notification.application.external.emailservices
 import pe.edu.upc.center.vitalia.notification.domain.model.commands.CreateNotificationCommand;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationCommandService;
 import pe.edu.upc.center.vitalia.shared.domain.events.DoctorCreatedEvent;
+import pe.edu.upc.center.vitalia.shared.domain.events.FamilyMemberCreatedEvent;
 
 import java.io.IOException;
 
@@ -22,6 +23,9 @@ public class UsersEventHandler {
     this.notificationCommandService = notificationCommandService;
   }
 
+  // ============================================================
+  // 📨 1. Evento de doctor creado
+  // ============================================================
   @EventListener
   @Async
   public void handleDoctorCreatedEvent(DoctorCreatedEvent event){
@@ -65,7 +69,53 @@ public class UsersEventHandler {
         event.licenseNumber()
     );
 
-    return new CreateNotificationCommand(title, content, 1L);
+    return new CreateNotificationCommand(title, content, event.userId());
 
+  }
+
+  // ============================================================
+  // 📨 2. Evento de familiar creado
+  // ============================================================
+  @EventListener
+  @Async
+  public void handleFamilyMemberCreatedEvent(FamilyMemberCreatedEvent event){
+    try {
+      emailService.sendFamilyMemberCreatedEmail(
+          event.emailAddress(),
+          event.relationship(),
+          event.firstName(),
+          event.lastName()
+      );
+
+      var createNotificationCommand = getCreateNotificationCommandByFamilyMember(event);
+      var result = notificationCommandService.handle(createNotificationCommand);
+
+      if (result.isPresent()) {
+        System.out.println(" Notificación creada exitosamente: " + result.get().getId());
+      } else {
+        System.err.println(" No se pudo crear la notificación");
+      }
+
+    } catch (IOException e) {
+      System.err.println("Error al enviar correo de bienvenida: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("Error al crear notificación: " + e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+  private CreateNotificationCommand getCreateNotificationCommandByFamilyMember(FamilyMemberCreatedEvent event) {
+    // Construyendo un título simple
+    String title = "Nuevo Familiar Registrado: " + event.firstName() + " " + event.lastName();
+
+    // Construyendo un contenido simple
+    String content = String.format(
+        "El Familiar %s %s ha sido registrado con éxito. Relación con el residente: %s.",
+        event.firstName(),
+        event.lastName(),
+        event.relationship()
+    );
+
+    return new CreateNotificationCommand(title, content, event.userId());
   }
 }

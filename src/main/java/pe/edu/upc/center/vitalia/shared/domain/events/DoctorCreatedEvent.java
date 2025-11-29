@@ -5,5 +5,6 @@ public record DoctorCreatedEvent(String licenseNumber,
                                  String firstName,
                                  String lastName,
                                  Long doctorId,
-                                 String emailAddress) {
+                                 String emailAddress,
+                                 Long userId) {
 }

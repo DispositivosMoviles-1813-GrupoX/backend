@@ -5,6 +5,7 @@ import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.FullName;
 public record CreateFamilyMemberResource(
         String relationship,
         Long linkedResidentId,
-        FullName fullName
+        FullName fullName,
+        Long userId
         //ContactInfo contactInfo
 ) {}

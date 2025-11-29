@@ -10,6 +10,7 @@ import pe.edu.upc.center.vitalia.users.domain.model.aggregates.Doctor;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.Address;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.ContactInfo;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.Schedule;
+import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.UserId;
 import pe.edu.upc.center.vitalia.users.domain.services.DoctorCommandService;
 import pe.edu.upc.center.vitalia.users.infrastructure.persistence.jpa.repositories.DoctorRepository;
 import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.AddressResource;
@@ -37,13 +38,18 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
 
     @Override
     public Doctor createDoctor(Doctor doctor) {
-      if (iamContextFacade.existsByUserId(doctor.getId())) {
-        throw new IllegalArgumentException("Doctor already exists");
+      if (!iamContextFacade.existsByUserId(doctor.getUserId().value())) {
+        throw new IllegalArgumentException("User with id " + doctor.getUserId().value() + " not found");
+      }
+
+      var doctorUserId = new UserId(doctor.getUserId().value());
+      if (doctorRepository.existsByUserId(doctorUserId)) {
+        throw new IllegalArgumentException("Doctor already exists with user id " + doctorUserId.value());
       }
 
       Doctor savedDoctor = doctorRepository.save(doctor);
 
-      var doctorEmail = externalIamService.getDoctorEmail(savedDoctor.getId());
+      var doctorEmail = externalIamService.getDoctorEmail(savedDoctor.getUserId().value());
 
       var event = new DoctorCreatedEvent(
           savedDoctor.getLicenseNumber(),
@@ -51,7 +57,8 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
           savedDoctor.getFullName().getFirstName(),
           savedDoctor.getFullName().getLastName(),
           savedDoctor.getId(),
-          doctorEmail);
+          doctorEmail,
+          savedDoctor.getUserId().value());
       publisher.publishEvent(event);
 
       return savedDoctor;
