@@ -27,7 +27,7 @@ public class UsersEventHandler {
   public void handleDoctorCreatedEvent(DoctorCreatedEvent event){
     try {
       emailService.sendDoctorCreatedEmail(
-          "miguelgomez26112001@gmail.com",
+          event.emailAddress(),
           event.firstName(),
           event.lastName(),
           event.specialty(),
