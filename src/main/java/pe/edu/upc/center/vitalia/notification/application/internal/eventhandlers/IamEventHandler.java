@@ -1,14 +1,18 @@
 package pe.edu.upc.center.vitalia.notification.application.internal.eventhandlers;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.mail.MessagingException;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 import pe.edu.upc.center.vitalia.notification.application.external.emailservices.EmailService;
 import pe.edu.upc.center.vitalia.notification.domain.model.commands.CreateNotificationCommand;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationCommandService;
 import pe.edu.upc.center.vitalia.shared.domain.events.UserCreatedEvent;
 
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -22,8 +26,13 @@ public class IamEventHandler {
     this.notificationCommandService = notificationCommandService;
   }
 
+  @PostConstruct
+  public void init() {
+    System.out.println("📩 IamEventHandler inicializado correctamente");
+  }
+
   @EventListener
-  @Async
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
   public void handleUserCreatedEvent(UserCreatedEvent event) {
     try {
       // Enviar email
@@ -43,7 +52,7 @@ public class IamEventHandler {
         System.err.println(" No se pudo crear la notificación");
       }
 
-    } catch (MessagingException e) {
+    } catch (IOException e) {
       System.err.println("Error al enviar correo de bienvenida: " + e.getMessage());
     } catch (Exception e) {
       System.err.println("Error al crear notificación: " + e.getMessage());

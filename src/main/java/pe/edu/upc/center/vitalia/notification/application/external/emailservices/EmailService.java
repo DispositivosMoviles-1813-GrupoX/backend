@@ -1,60 +1,95 @@
 package pe.edu.upc.center.vitalia.notification.application.external.emailservices;
 
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.sendgrid.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+
+import java.io.IOException;
+
 @Service
 public class EmailService {
-  private final JavaMailSender mailSender;
+
   private final TemplateEngine templateEngine;
 
-  public EmailService(JavaMailSender mailSender,
-                      TemplateEngine templateEngine) {
-    this.mailSender = mailSender;
+  @Value("${SENDGRID_API_KEY}")
+  private String apiKey;
+
+  @Value("${EMAIL}")
+  private String from;
+
+  public EmailService(TemplateEngine templateEngine) {
     this.templateEngine = templateEngine;
   }
 
-  /**
-   * Envía un correo de bienvenida usando la plantilla Thymeleaf.
-   */
-  public void sendWelcomeEmail(String to, String username, String email) throws MessagingException {
-    // Crear el contexto Thymeleaf (variables para la plantilla)
+  // ============================================================
+  // 📧 Método general para enviar correo con SendGrid API
+  // ============================================================
+  private void sendEmailApi(String to, String subject, String htmlContent) throws IOException {
+
+    Email fromEmail = new Email(from, "MiApp");
+    Email toEmail = new Email(to);
+
+    Content content = new Content("text/html", htmlContent);
+    Mail mail = new Mail(fromEmail, subject, toEmail, content);
+
+    SendGrid sg = new SendGrid(apiKey);
+    Request request = new Request();
+
+    request.setMethod(Method.POST);
+    request.setEndpoint("mail/send");
+    request.setBody(mail.build());
+
+    Response response = sg.api(request);
+
+    System.out.println("📤 SendGrid status: " + response.getStatusCode());
+    System.out.println("📤 Body: " + response.getBody());
+  }
+
+  // ============================================================
+  // 📨 1. Email de bienvenida
+  // ============================================================
+  public void sendWelcomeEmail(String to, String username, String email) throws IOException {
+
     Context context = new Context();
     context.setVariable("username", username);
     context.setVariable("email", email);
     context.setVariable("urlLogin", "https://miapp.com/login");
 
-    // Nombre de la plantilla (ruta relativa a /resources/templates/)
     String templateName = "email/bienvenida-usuario";
+    String html = templateEngine.process(templateName, context);
 
-    // Procesar plantilla y generar el HTML final
-    String htmlContent = templateEngine.process(templateName, context);
+    String subject = "¡Bienvenido a MiApp, " + username + "! 🎉";
 
-    // Configurar mensaje MIME
-    MimeMessage mimeMessage = mailSender.createMimeMessage();
-    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-
-    helper.setTo(to);
-    helper.setSubject("¡Bienvenido a MiApp, " + username + "! 🎉");
-    helper.setText(htmlContent, true); // Activar HTML
-
-    // Enviar correo
-    mailSender.send(mimeMessage);
+    sendEmailApi(to, subject, html);
 
     System.out.println("✅ Correo de bienvenida enviado a " + to);
   }
 
-  public void sendDoctorCreatedEmail(String to,
-                                     String firstname,
-                                     String lastname,
-                                     String speciality,
-                                     String licenseNumber,
-                                     Long doctorId) throws MessagingException {
+  // ============================================================
+  // 📨 2. Email de doctor creado
+  // ============================================================
+  public void sendDoctorCreatedEmail(
+      String to,
+      String firstname,
+      String lastname,
+      String speciality,
+      String licenseNumber,
+      Long doctorId
+  ) throws IOException {
 
     Context context = new Context();
     context.setVariable("firstName", firstname);
@@ -64,17 +99,12 @@ public class EmailService {
     context.setVariable("doctorId", doctorId.toString());
 
     String templateName = "email/doctor-creado";
-    String htmlContent = templateEngine.process(templateName, context);
-    MimeMessage mimeMessage = mailSender.createMimeMessage();
-    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+    String html = templateEngine.process(templateName, context);
 
-    helper.setTo(to);
-    helper.setSubject("Nuevo Doctor Registrado: Dr. " + firstname + " " + lastname);
-    helper.setText(htmlContent, true); // Activar HTML
+    String subject = "Nuevo Doctor Registrado: Dr. " + firstname + " " + lastname;
 
-    mailSender.send(mimeMessage);
-    System.out.println("✅ Correo de registro de doctor enviado a " + to +
-        " (Doctor: " + firstname + " " + lastname + ")");
+    sendEmailApi(to, subject, html);
 
+    System.out.println("✅ Correo de registro de doctor enviado a " + to);
   }
 }
