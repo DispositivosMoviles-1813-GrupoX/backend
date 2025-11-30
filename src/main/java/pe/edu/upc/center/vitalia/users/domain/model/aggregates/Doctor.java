@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.ContactInfo;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.FullName;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.Schedule;
+import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.UserId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@AttributeOverrides({
+    @AttributeOverride(name = "userId.value", column = @Column(name = "user_id"))
+})
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,11 +38,13 @@ public class Doctor {
     @JoinColumn(name = "doctor_id")
     private List<Schedule> schedules = new ArrayList<>();
 
-
-
     @Embedded
     private FullName fullName;
 
     @Embedded
     private ContactInfo contactInfo;
+
+  @Nullable
+  @Embedded
+  private UserId userId;
 }

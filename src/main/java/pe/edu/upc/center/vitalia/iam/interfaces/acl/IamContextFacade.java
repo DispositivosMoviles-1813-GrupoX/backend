@@ -1,6 +1,7 @@
 package pe.edu.upc.center.vitalia.iam.interfaces.acl;
 
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.iam.domain.model.commands.SignUpCommand;
 import pe.edu.upc.center.vitalia.iam.domain.model.entities.Role;
 import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByIdQuery;
@@ -21,6 +22,7 @@ import java.util.List;
  * </p>
  *
  */
+@Service
 public class IamContextFacade {
 
   private final UserCommandService userCommandService;
@@ -88,5 +90,18 @@ public class IamContextFacade {
     if (result.isEmpty())
       return Strings.EMPTY;
     return result.get().getUsername();
+  }
+
+  public String fetchEmailByUserId(Long userId) {
+    var getUserByIdQuery = new GetUserByIdQuery(userId);
+    var result = userQueryService.handle(getUserByIdQuery);
+    if (result.isEmpty())
+      return Strings.EMPTY;
+    return result.get().getEmailAddress();
+  }
+
+  public boolean existsByUserId(Long userId) {
+    var getUserByIdQuery = new GetUserByIdQuery(userId);
+    return userQueryService.handle(getUserByIdQuery).isPresent();
   }
 }

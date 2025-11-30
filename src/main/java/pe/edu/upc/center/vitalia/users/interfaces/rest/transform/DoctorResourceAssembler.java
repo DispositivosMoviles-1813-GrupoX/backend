@@ -2,6 +2,7 @@ package pe.edu.upc.center.vitalia.users.interfaces.rest.transform;
 
 import pe.edu.upc.center.vitalia.users.domain.model.aggregates.Doctor;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.Schedule;
+import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.UserId;
 import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.CreateDoctorResource;
 import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.DoctorResource;
 import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.ScheduleResource;
@@ -29,6 +30,7 @@ public class DoctorResourceAssembler {
         doctor.setFullName(resource.fullName());
         doctor.setSchedules(new ArrayList<>());  // Inicializa vacío
         doctor.setContactInfo(resource.contactInfo());
+        doctor.setUserId(new UserId(resource.userId()));
         return doctor;
     }
 

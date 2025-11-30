@@ -3,11 +3,14 @@ package pe.edu.upc.center.vitalia.users.application.internal.commandservices;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.center.vitalia.iam.interfaces.acl.IamContextFacade;
 import pe.edu.upc.center.vitalia.shared.domain.events.DoctorCreatedEvent;
+import pe.edu.upc.center.vitalia.users.application.internal.outboundservices.ExternalIamService;
 import pe.edu.upc.center.vitalia.users.domain.model.aggregates.Doctor;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.Address;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.ContactInfo;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.Schedule;
+import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.UserId;
 import pe.edu.upc.center.vitalia.users.domain.services.DoctorCommandService;
 import pe.edu.upc.center.vitalia.users.infrastructure.persistence.jpa.repositories.DoctorRepository;
 import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.AddressResource;
@@ -20,24 +23,42 @@ import pe.edu.upc.center.vitalia.users.interfaces.rest.transform.DoctorResourceA
 public class DoctorCommandServiceImpl implements DoctorCommandService {
 
     private final DoctorRepository doctorRepository;
+    private final ExternalIamService externalIamService;
   private final ApplicationEventPublisher publisher;
+  private final IamContextFacade iamContextFacade;
 
-    public DoctorCommandServiceImpl(DoctorRepository doctorRepository,
-                                    ApplicationEventPublisher publisher) {
+  public DoctorCommandServiceImpl(DoctorRepository doctorRepository,
+                                    ExternalIamService externalIamService,
+                                    ApplicationEventPublisher publisher, IamContextFacade iamContextFacade) {
         this.doctorRepository = doctorRepository;
+        this.externalIamService = externalIamService;
         this.publisher = publisher;
-    }
+    this.iamContextFacade = iamContextFacade;
+  }
 
     @Override
     public Doctor createDoctor(Doctor doctor) {
+      if (!iamContextFacade.existsByUserId(doctor.getUserId().value())) {
+        throw new IllegalArgumentException("User with id " + doctor.getUserId().value() + " not found");
+      }
+
+      var doctorUserId = new UserId(doctor.getUserId().value());
+      if (doctorRepository.existsByUserId(doctorUserId)) {
+        throw new IllegalArgumentException("Doctor already exists with user id " + doctorUserId.value());
+      }
+
       Doctor savedDoctor = doctorRepository.save(doctor);
+
+      var doctorEmail = externalIamService.getDoctorEmail(savedDoctor.getUserId().value());
 
       var event = new DoctorCreatedEvent(
           savedDoctor.getLicenseNumber(),
           savedDoctor.getSpecialty(),
           savedDoctor.getFullName().getFirstName(),
           savedDoctor.getFullName().getLastName(),
-          savedDoctor.getId());
+          savedDoctor.getId(),
+          doctorEmail,
+          savedDoctor.getUserId().value());
       publisher.publishEvent(event);
 
       return savedDoctor;

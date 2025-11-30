@@ -3,7 +3,9 @@ package pe.edu.upc.center.vitalia.users.infrastructure.persistence.jpa.repositor
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pe.edu.upc.center.vitalia.users.domain.model.aggregates.FamilyMember;
+import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.UserId;
 
 @Repository
 public interface FamilyMemberRepository extends JpaRepository<FamilyMember, Long> {
+  public boolean existsByUserId(UserId userId);
 }

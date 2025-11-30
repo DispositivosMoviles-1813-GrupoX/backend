@@ -107,4 +107,28 @@ public class EmailService {
 
     System.out.println("✅ Correo de registro de doctor enviado a " + to);
   }
+
+  // ============================================================
+  // 📨 3. Email de familiar creado
+  // ============================================================
+  public void sendFamilyMemberCreatedEmail(
+      String to,
+      String relationship,
+      String firstname,
+      String lastname) throws IOException {
+
+    Context context = new Context();
+    context.setVariable("relationship", relationship);
+    context.setVariable("firstName", firstname);
+    context.setVariable("lastName", lastname);
+    context.setVariable("email", to);
+
+    String templateName = "email/familiar-creado";
+    String html = templateEngine.process(templateName, context);
+
+    String subject = "Nuevo Familiar Registrado: " + firstname + " " + lastname;
+
+    sendEmailApi(to, subject, html);
+    System.out.println("✅ Correo de registro de familiar enviado a " + to);
+  }
 }
