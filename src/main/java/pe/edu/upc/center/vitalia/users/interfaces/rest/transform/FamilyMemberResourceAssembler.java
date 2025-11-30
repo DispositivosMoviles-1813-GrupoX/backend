@@ -1,6 +1,7 @@
 package pe.edu.upc.center.vitalia.users.interfaces.rest.transform;
 
 import pe.edu.upc.center.vitalia.users.domain.model.aggregates.FamilyMember;
+import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.UserId;
 import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.CreateFamilyMemberResource;
 import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.FamilyMemberResource;
 import pe.edu.upc.center.vitalia.users.interfaces.rest.resources.UpdateFamilyMemberResource;
@@ -22,6 +23,7 @@ public class FamilyMemberResourceAssembler {
         familyMember.setRelationship(resource.relationship());
         familyMember.setLinkedResidentId(resource.linkedResidentId());
         familyMember.setFullName(resource.fullName());
+        familyMember.setUserId(new UserId(resource.userId()));
         //familyMember.setContactInfo(resource.contactInfo());
         return familyMember;
     }

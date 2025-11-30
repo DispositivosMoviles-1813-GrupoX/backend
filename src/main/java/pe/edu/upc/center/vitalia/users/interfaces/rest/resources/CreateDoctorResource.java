@@ -8,5 +8,6 @@ public record CreateDoctorResource(
         String specialty,
         //Schedule schedule,
         FullName fullName,
-        ContactInfo contactInfo
+        ContactInfo contactInfo,
+        Long userId
 ) {}
