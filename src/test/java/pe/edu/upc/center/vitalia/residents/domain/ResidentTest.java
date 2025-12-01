@@ -30,8 +30,7 @@ class ResidentTest {
                 new ReceiptId(1L),
                 new ArrayList<>(),
                 new ArrayList<>(),
-                new ArrayList<>()
-        );
+                new ArrayList<>());
     }
 
     @Test
@@ -42,11 +41,9 @@ class ResidentTest {
         assertEquals("Ibuprofen", resident.getMedication().get(0).getName());
     }
 
-
-
     @Test
     void shouldAddMentalHealthRecordSuccessfully() {
-        MentalHealthRecord record = new MentalHealthRecord(new Date(),"Happy", "Good mood");
+        MentalHealthRecord record = new MentalHealthRecord(new Date(), "Happy", "Good mood");
         resident.addMentalHealthRecord(record);
 
         assertEquals(1, resident.getMentalHealthRecords().size());
@@ -55,7 +52,7 @@ class ResidentTest {
 
     @Test
     void shouldAddMedicalHistorySuccessfully() {
-        MedicalHistory history = new MedicalHistory(new Date(),"Flu", "Rest and hydration");
+        MedicalHistory history = new MedicalHistory(new Date(), "Flu", "Rest and hydration");
         resident.addMedicalHistory(history);
 
         assertEquals(1, resident.getMedicalHistories().size());

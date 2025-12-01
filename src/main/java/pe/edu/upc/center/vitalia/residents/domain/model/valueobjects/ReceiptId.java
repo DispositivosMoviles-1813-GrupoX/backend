@@ -10,8 +10,8 @@ public record ReceiptId(Long receiptId) {
     }
 
     public ReceiptId {
-        if (receiptId == null || receiptId <= 0) {
-            throw new IllegalArgumentException("ReceiptId must be positive and not null");
+        if (receiptId != null && receiptId <= 0) {
+            throw new IllegalArgumentException("ReceiptId must be positive");
         }
     }
 }

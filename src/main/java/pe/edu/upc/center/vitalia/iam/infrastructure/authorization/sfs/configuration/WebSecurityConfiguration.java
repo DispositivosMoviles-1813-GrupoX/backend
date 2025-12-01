@@ -92,7 +92,7 @@ public class WebSecurityConfiguration {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.cors(corsConfigurer -> corsConfigurer.configurationSource( request -> {
       var cors = new CorsConfiguration();
-      cors.setAllowedOrigins(List.of("*"));
+      cors.setAllowedOriginPatterns(List.of("*"));
       cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
       cors.setAllowedHeaders(List.of("*"));
       return cors;

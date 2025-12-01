@@ -25,7 +25,6 @@ import pe.edu.upc.center.vitalia.residents.interfaces.rest.transform.UpdateResid
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 @RestController
 @RequestMapping(value = "/api/v1/residents", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Residents", description = "Resident Management Endpoints")
