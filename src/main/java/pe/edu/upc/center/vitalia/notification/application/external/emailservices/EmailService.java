@@ -119,8 +119,8 @@ public class EmailService {
 
     Context context = new Context();
     context.setVariable("relationship", relationship);
-    context.setVariable("firstName", firstname);
-    context.setVariable("lastName", lastname);
+    context.setVariable("firstname", firstname);
+    context.setVariable("lastname", lastname);
     context.setVariable("email", to);
 
     String templateName = "email/familiar-creado";
