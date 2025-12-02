@@ -2,65 +2,126 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Bienvenido a MiApp</title>
+    <title>Bienvenido a Vitalia</title>
+
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 30px;
+            background-color: #f3f4f6;
+            padding: 35px;
+            margin: 0;
         }
+
         .container {
             background-color: #ffffff;
-            border-radius: 10px;
-            padding: 25px 30px;
-            max-width: 600px;
+            border-radius: 14px;
+            padding: 35px 40px;
+            max-width: 650px;
             margin: auto;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 6px solid #28a745; /* Verde Vitalia */
         }
+
         h2 {
-            color: #4CAF50;
-            margin-bottom: 10px;
+            color: #28a745; /* Verde Vitalia */
+            margin-top: 0;
+            font-size: 26px;
+            font-weight: 700;
         }
+
         p {
             color: #444;
-            font-size: 15px;
-            line-height: 1.6;
+            font-size: 16px;
+            line-height: 1.65;
+            margin-bottom: 15px;
         }
+
         .highlight {
-            color: #4CAF50;
+            color: #28a745;
             font-weight: bold;
         }
+
         .button {
             display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
+            padding: 12px 26px;
+            background-color: #28a745;
+            color: #ffffff !important;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.12);
         }
-        .footer {
-            font-size: 12px;
-            color: #999;
+
+        .button:hover {
+            opacity: 0.92;
+        }
+
+        .logo-container {
             text-align: center;
-            margin-top: 30px;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .footer {
+            font-size: 13px;
+            color: #888;
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .tagline {
+            color: #28a745;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
         }
     </style>
 </head>
+
 <body>
+
 <div class="container">
+
+    <!-- Logo / Marca -->
+    <div class="logo-container">
+        <div class="logo">Vitalia</div>
+    </div>
+
+    <!-- Frase de bienvenida -->
+    <div class="tagline">Tu bienestar y el de tus seres queridos, en un solo lugar.</div>
+
     <h2>¡Bienvenido, [[${username}]]! 👋</h2>
-    <p>Nos alegra tenerte en <b>MiApp</b>.</p>
-    <p>Tu cuenta fue registrada con el correo:
+
+    <p>
+        Nos alegra darte la bienvenida a <strong>Vitalia</strong>, tu nueva plataforma para la
+        gestión médica moderna y el cuidado integral de la salud.
+    </p>
+
+    <p>
+        Tu cuenta fue registrada con el correo:
         <span class="highlight">[[${email}]]</span>.
     </p>
-    <p>Puedes iniciar sesión en tu cuenta cuando quieras haciendo clic en el botón de abajo.</p>
 
-    <a class="button" href="[[${urlLogin}]]">Iniciar sesión</a>
+    <p>
+        Ya puedes acceder a tu panel y comenzar a explorar todo lo que Vitalia tiene para ti.
+    </p>
+
+    <a class="button" href="[[${urlLogin}]]">Acceder a mi cuenta</a>
 
     <div class="footer">
-        © 2025 MiApp — Todos los derechos reservados.
+        © 2025 <strong>Vitalia</strong> — Cuidado Médico Inteligente.
+        Todos los derechos reservados.
     </div>
+
 </div>
+
 </body>
 </html>

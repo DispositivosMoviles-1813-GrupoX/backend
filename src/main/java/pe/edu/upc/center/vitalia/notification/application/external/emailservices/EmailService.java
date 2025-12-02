@@ -37,11 +37,11 @@ public class EmailService {
   }
 
   // ============================================================
-  // 📧 Método general para enviar correo con SendGrid API
+  // Método general para enviar correo con SendGrid API
   // ============================================================
   private void sendEmailApi(String to, String subject, String htmlContent) throws IOException {
 
-    Email fromEmail = new Email(from, "MiApp");
+    Email fromEmail = new Email(from, "Vitalia");
     Email toEmail = new Email(to);
 
     Content content = new Content("text/html", htmlContent);
@@ -56,12 +56,12 @@ public class EmailService {
 
     Response response = sg.api(request);
 
-    System.out.println("📤 SendGrid status: " + response.getStatusCode());
-    System.out.println("📤 Body: " + response.getBody());
+    System.out.println("SendGrid status: " + response.getStatusCode());
+    System.out.println("Body: " + response.getBody());
   }
 
   // ============================================================
-  // 📨 1. Email de bienvenida
+  // 1. Email de bienvenida
   // ============================================================
   public void sendWelcomeEmail(String to, String username, String email) throws IOException {
 
@@ -73,15 +73,15 @@ public class EmailService {
     String templateName = "email/bienvenida-usuario";
     String html = templateEngine.process(templateName, context);
 
-    String subject = "¡Bienvenido a MiApp, " + username + "! 🎉";
+    String subject = "¡Bienvenido a Vitalia, " + username + "! 🎉";
 
     sendEmailApi(to, subject, html);
 
-    System.out.println("✅ Correo de bienvenida enviado a " + to);
+    System.out.println("Correo de bienvenida enviado a " + to);
   }
 
   // ============================================================
-  // 📨 2. Email de doctor creado
+  // 2. Email de doctor creado
   // ============================================================
   public void sendDoctorCreatedEmail(
       String to,
@@ -102,15 +102,15 @@ public class EmailService {
     String templateName = "email/doctor-creado";
     String html = templateEngine.process(templateName, context);
 
-    String subject = "Nuevo Doctor Registrado: Dr. " + firstname + " " + lastname;
+    String subject = "Nuevo Doctor Registrado en Vitalia: Dr. " + firstname + " " + lastname;
 
     sendEmailApi(to, subject, html);
 
-    System.out.println("✅ Correo de registro de doctor enviado a " + to);
+    System.out.println("Correo de registro de doctor enviado a " + to);
   }
 
   // ============================================================
-  // 📨 3. Email de familiar creado
+  // 3. Email de familiar creado
   // ============================================================
   public void sendFamilyMemberCreatedEmail(
       String to,
@@ -127,14 +127,14 @@ public class EmailService {
     String templateName = "email/familiar-creado";
     String html = templateEngine.process(templateName, context);
 
-    String subject = "Nuevo Familiar Registrado: " + firstname + " " + lastname;
+    String subject = "Nuevo Familiar Registrado en Vitalia: " + firstname + " " + lastname;
 
     sendEmailApi(to, subject, html);
-    System.out.println("✅ Correo de registro de familiar enviado a " + to);
+    System.out.println("Correo de registro de familiar enviado a " + to);
   }
 
   // ============================================================
-  // 📨 4. Email de horario añadido
+  // 4. Email de horario añadido
   // ============================================================
   public void sendScheduleAddedEmail(AddedScheduled event) throws IOException {
 
@@ -148,7 +148,7 @@ public class EmailService {
     String templateName = "email/horario-añadido";
     String html = templateEngine.process(templateName, context);
 
-    String subject = "Nuevo horario añadido al doctor (ID: " + event.doctorId() + ")";
+    String subject = "Nuevo Horario Registrado en Vitalia (Doctor ID: " + event.doctorId() + ")";
 
     sendEmailApi(event.emailAddress(), subject, html);
 
