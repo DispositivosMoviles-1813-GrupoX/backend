@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import pe.edu.upc.center.vitalia.shared.domain.events.AddedScheduled;
 
 import java.io.IOException;
 
@@ -130,5 +131,27 @@ public class EmailService {
 
     sendEmailApi(to, subject, html);
     System.out.println("✅ Correo de registro de familiar enviado a " + to);
+  }
+
+  // ============================================================
+  // 📨 4. Email de horario añadido
+  // ============================================================
+  public void sendScheduleAddedEmail(AddedScheduled event) throws IOException {
+
+    Context context = new Context();
+    context.setVariable("doctorId", event.doctorId());
+    context.setVariable("day", event.day());
+    context.setVariable("startTime", event.startTime());
+    context.setVariable("endTime", event.endTime());
+    context.setVariable("appointmentId", event.appointmentId());
+
+    String templateName = "email/horario-añadido";
+    String html = templateEngine.process(templateName, context);
+
+    String subject = "Nuevo horario añadido al doctor (ID: " + event.doctorId() + ")";
+
+    sendEmailApi(event.emailAddress(), subject, html);
+
+    System.out.println("Correo de horario añadido enviado a " + event.emailAddress());
   }
 }

@@ -4,6 +4,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.iam.domain.model.commands.SignUpCommand;
 import pe.edu.upc.center.vitalia.iam.domain.model.entities.Role;
+import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByEmailQuery;
 import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByIdQuery;
 import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByUsernameQuery;
 import pe.edu.upc.center.vitalia.iam.domain.services.UserCommandService;
@@ -103,5 +104,13 @@ public class IamContextFacade {
   public boolean existsByUserId(Long userId) {
     var getUserByIdQuery = new GetUserByIdQuery(userId);
     return userQueryService.handle(getUserByIdQuery).isPresent();
+  }
+
+  public Long fetchUserIdByEmail(String email) {
+    var getUserByEmailQuery = new GetUserByEmailQuery(email);
+    var user = userQueryService.handle(getUserByEmailQuery);
+    if (user.isEmpty())
+      return 0L;
+    return user.get().getId();
   }
 }

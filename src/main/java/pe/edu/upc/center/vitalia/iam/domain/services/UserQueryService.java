@@ -2,6 +2,7 @@ package pe.edu.upc.center.vitalia.iam.domain.services;
 
 import pe.edu.upc.center.vitalia.iam.domain.model.aggregates.User;
 import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetAllUsersQuery;
+import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByEmailQuery;
 import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByIdQuery;
 import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByUsernameQuery;
 
@@ -12,4 +13,5 @@ public interface UserQueryService {
   List<User> handle(GetAllUsersQuery query);
   Optional<User> handle(GetUserByIdQuery query);
   Optional<User> handle(GetUserByUsernameQuery query);
+  Optional<User> handle(GetUserByEmailQuery query);
 }

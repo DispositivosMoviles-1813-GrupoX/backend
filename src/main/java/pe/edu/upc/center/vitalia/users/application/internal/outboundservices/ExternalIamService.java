@@ -3,7 +3,7 @@ package pe.edu.upc.center.vitalia.users.application.internal.outboundservices;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.iam.interfaces.acl.IamContextFacade;
 
-@Service
+@Service("externalIamServiceUsers")
 public class ExternalIamService {
   private final IamContextFacade iamContextFacade;
 
@@ -17,5 +17,9 @@ public class ExternalIamService {
 
   public boolean existsByUserId(Long userId) {
     return iamContextFacade.existsByUserId(userId);
+  }
+
+  public Long fetchUserIdByEmail(String email) {
+    return iamContextFacade.fetchUserIdByEmail(email);
   }
 }
