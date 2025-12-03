@@ -2,14 +2,18 @@ package pe.edu.upc.center.vitalia.users.interfaces.acl;
 
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.users.domain.model.queries.GetFamilyMemberByResidentIdQuery;
+import pe.edu.upc.center.vitalia.users.domain.services.DoctorQueryService;
 import pe.edu.upc.center.vitalia.users.domain.services.FamilyMemberQueryService;
 
 @Service
 public class UserContextFacade {
   private final FamilyMemberQueryService familyMemberQueryService;
+  private final DoctorQueryService doctorQueryService;
 
-  public UserContextFacade(FamilyMemberQueryService familyMemberQueryService) {
+  public UserContextFacade(FamilyMemberQueryService familyMemberQueryService,
+                           DoctorQueryService doctorQueryService) {
     this.familyMemberQueryService = familyMemberQueryService;
+    this.doctorQueryService = doctorQueryService;
   }
 
   public Long fetchFamilyMemberIdByResidentId(Long residentId) {
@@ -32,5 +36,12 @@ public class UserContextFacade {
     var familyMember = this.familyMemberQueryService.handle(getFamilyMemberByResidentIdQuery);
     if (familyMember.isEmpty()) return 0L;
     return familyMember.get().getUserId().value();
+  }
+
+  // Doctores
+  public Long fetchDoctorUserIdByDoctorId(Long doctorId) {
+    var doctor = doctorQueryService.getDoctorById(doctorId);
+    if (doctor.isEmpty()) return 0L;
+    return doctor.get().getUserId().value();
   }
 }
