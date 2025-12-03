@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pe.edu.upc.center.vitalia.iam.domain.model.aggregates.User;
 import org.springframework.lang.Nullable;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.ContactInfo;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.FullName;
@@ -44,7 +45,10 @@ public class Doctor {
     @Embedded
     private ContactInfo contactInfo;
 
-  @Nullable
-  @Embedded
-  private UserId userId;
+    //@Nullable
+    //@Embedded
+    //private UserId userId;
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

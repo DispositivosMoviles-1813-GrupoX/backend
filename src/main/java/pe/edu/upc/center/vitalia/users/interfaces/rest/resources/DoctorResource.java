@@ -12,5 +12,6 @@ public record DoctorResource(
         String specialty,
         List<Schedule> schedules,
         FullName fullName,
-        ContactInfo contactInfo
+        ContactInfo contactInfo,
+        Long userId
 ) {}

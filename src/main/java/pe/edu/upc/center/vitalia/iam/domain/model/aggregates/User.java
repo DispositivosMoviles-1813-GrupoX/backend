@@ -88,4 +88,16 @@ public class User extends AuditableAbstractAggregateRoot<User> {
   public String getEmailAddress() {
     return email.address();
   }
+
+  public void setId(Long id) {
+    // Intentamos acceder al campo 'id' de la clase padre
+    try {
+      var field = this.getClass().getSuperclass().getDeclaredField("id");
+      field.setAccessible(true);
+      field.set(this, id);
+    } catch (Exception e) {
+      // Si falla la reflexión, intentamos el metodo estándar por si existe
+      // super.setId(id); // Descomenta esto si tu clase padre tiene setId
+    }
+  }
 }

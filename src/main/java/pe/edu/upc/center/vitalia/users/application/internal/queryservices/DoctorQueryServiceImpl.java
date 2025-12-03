@@ -30,4 +30,10 @@ public class DoctorQueryServiceImpl implements DoctorQueryService {
 
         return doctorRepository.findById(id);
     }
+    @Override
+    public Optional<Doctor> getDoctorByUserId(Long userId) {
+        // Llama directamente al repositorio, igual que getDoctorById
+        return doctorRepository.findByUserId(userId);
+    }
+
 }

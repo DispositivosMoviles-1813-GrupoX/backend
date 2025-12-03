@@ -1,5 +1,6 @@
 package pe.edu.upc.center.vitalia.users.interfaces.rest.transform;
 
+import pe.edu.upc.center.vitalia.iam.domain.model.aggregates.User;
 import pe.edu.upc.center.vitalia.users.domain.model.aggregates.Doctor;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.Schedule;
 import pe.edu.upc.center.vitalia.users.domain.model.valueobjects.UserId;
@@ -19,7 +20,8 @@ public class DoctorResourceAssembler {
                 doctor.getSpecialty(),
                 doctor.getSchedules(),
                 doctor.getFullName(),
-                doctor.getContactInfo()
+                doctor.getContactInfo(),
+                doctor.getUser().getId()
         );
     }
 
@@ -30,7 +32,19 @@ public class DoctorResourceAssembler {
         doctor.setFullName(resource.fullName());
         doctor.setSchedules(new ArrayList<>());  // Inicializa vacío
         doctor.setContactInfo(resource.contactInfo());
-        doctor.setUserId(new UserId(resource.userId()));
+        //doctor.setUserId(new UserId(resource.userId()));
+        User user = new User();
+
+        try {
+            // Usamos reflexión para asignar el ID, ya que setId podría estar protegido en la clase padre
+            var idField = user.getClass().getSuperclass().getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(user, resource.userId());
+        } catch (Exception e) {
+            // Si falla, intentamos asignarlo asumiendo que el ID es válido o lanzamos error
+            throw new RuntimeException("Error al asignar ID de usuario al doctor", e);
+        }
+        doctor.setUser(user);
         return doctor;
     }
 

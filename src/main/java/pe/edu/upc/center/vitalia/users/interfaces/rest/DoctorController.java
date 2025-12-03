@@ -303,4 +303,15 @@ public class DoctorController {
         Doctor updatedDoctor = doctorCommandService.updateAddress(id, addressResource);
         return ResponseEntity.ok(DoctorResourceAssembler.toResource(updatedDoctor));
     }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<DoctorResource> getDoctorByUserId(@PathVariable Long userId) {
+        // Usamos el servicio con el estilo directo que preferías
+        var doctor = doctorQueryService.getDoctorByUserId(userId);
+
+        if (doctor.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(DoctorResourceAssembler.toResource(doctor.get()));
+    }
 }

@@ -38,18 +38,19 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
 
     @Override
     public Doctor createDoctor(Doctor doctor) {
-      if (!iamContextFacade.existsByUserId(doctor.getUserId().value())) {
-        throw new IllegalArgumentException("User with id " + doctor.getUserId().value() + " not found");
+        Long userId = doctor.getUser().getId();
+      if (!iamContextFacade.existsByUserId(userId)) {
+        throw new IllegalArgumentException("User with id " + userId + " not found");
       }
 
-      var doctorUserId = new UserId(doctor.getUserId().value());
-      if (doctorRepository.existsByUserId(doctorUserId)) {
-        throw new IllegalArgumentException("Doctor already exists with user id " + doctorUserId.value());
+      //var doctorUserId = new UserId(doctor.getUserId().value());
+      if (doctorRepository.existsByUserId(userId)) {
+        throw new IllegalArgumentException("Doctor already exists with user id " + userId);
       }
 
       Doctor savedDoctor = doctorRepository.save(doctor);
 
-      var doctorEmail = externalIamService.getDoctorEmail(savedDoctor.getUserId().value());
+      var doctorEmail = externalIamService.getDoctorEmail(userId);
 
       var event = new DoctorCreatedEvent(
           savedDoctor.getLicenseNumber(),
@@ -58,7 +59,7 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
           savedDoctor.getFullName().getLastName(),
           savedDoctor.getId(),
           doctorEmail,
-          savedDoctor.getUserId().value());
+          userId);
       publisher.publishEvent(event);
 
       return savedDoctor;
