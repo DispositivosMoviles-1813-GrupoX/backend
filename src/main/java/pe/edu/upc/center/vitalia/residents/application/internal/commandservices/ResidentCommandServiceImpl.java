@@ -1,12 +1,16 @@
 package pe.edu.upc.center.vitalia.residents.application.internal.commandservices;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.center.vitalia.residents.application.internal.outboundservices.ExternalIamService;
+import pe.edu.upc.center.vitalia.residents.application.internal.outboundservices.ExternalUsersService;
 import pe.edu.upc.center.vitalia.residents.domain.model.aggregates.Resident;
 import pe.edu.upc.center.vitalia.residents.domain.model.commands.CreateResidentCommand;
 import pe.edu.upc.center.vitalia.residents.domain.model.commands.DeleteResidentCommand;
 import pe.edu.upc.center.vitalia.residents.domain.model.commands.UpdateResidentCommand;
 import pe.edu.upc.center.vitalia.residents.domain.services.ResidentCommandService;
 import pe.edu.upc.center.vitalia.residents.infrastructure.persistence.jpa.repositories.ResidentRepository;
+import pe.edu.upc.center.vitalia.shared.domain.events.ResidentCreatedEvent;
 
 import java.util.Optional;
 
@@ -14,9 +18,18 @@ import java.util.Optional;
 public class ResidentCommandServiceImpl implements ResidentCommandService {
 
     private final ResidentRepository residentRepository;
+    private final ExternalUsersService externalUsersService;
+    private final ExternalIamService externalIamService;
+    private final ApplicationEventPublisher publisher;
 
-    public ResidentCommandServiceImpl(ResidentRepository residentRepository) {
+    public ResidentCommandServiceImpl(ResidentRepository residentRepository,
+                                      ExternalUsersService externalUsersService,
+                                      ExternalIamService externalIamService,
+                                      ApplicationEventPublisher publisher) {
         this.residentRepository = residentRepository;
+        this.externalUsersService = externalUsersService;
+        this.externalIamService = externalIamService;
+        this.publisher = publisher;
     }
 
     @Override
@@ -26,11 +39,34 @@ public class ResidentCommandServiceImpl implements ResidentCommandService {
         }
 
         Resident resident = new Resident(command);
+
         try {
             this.residentRepository.save(resident);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while saving resident: " + e.getMessage());
         }
+
+        var residentId = resident.getId();
+        var familyMemberId = externalUsersService.fetchFamilyMemberIdByResidentId(residentId);
+        var familyMemberName = externalUsersService.fetchFamilyMemberNameByResidentId(residentId);
+        var familyMemberUserId = externalUsersService.fetchFamilyMemberUserIdByResidenId(residentId);
+        var familyMemberEmail = externalIamService.fetchEmailByUserId(familyMemberUserId);
+
+        var event = new ResidentCreatedEvent(
+            resident.getId(),
+            resident.getDni(),
+            resident.getFullName().firstName(),
+            resident.getFullName().lastName(),
+            resident.getGender(),
+            resident.getAddress().city(),
+            resident.getAddress().country(),
+            familyMemberId,
+            familyMemberName,
+            familyMemberUserId,
+            familyMemberEmail);
+        publisher.publishEvent(event);
+
+
         return resident.getId();
     }
 

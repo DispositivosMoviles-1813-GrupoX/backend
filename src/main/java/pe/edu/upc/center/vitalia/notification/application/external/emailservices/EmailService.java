@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import pe.edu.upc.center.vitalia.shared.domain.events.AddedScheduled;
+import pe.edu.upc.center.vitalia.shared.domain.events.ResidentCreatedEvent;
 
 import java.io.IOException;
 
@@ -153,5 +154,40 @@ public class EmailService {
     sendEmailApi(event.emailAddress(), subject, html);
 
     System.out.println("Correo de horario añadido enviado a " + event.emailAddress());
+  }
+
+  // ============================================================
+  // 5. Email de residente creado
+  // ============================================================
+  public void sendResidentCreatedEmail(ResidentCreatedEvent event) throws IOException {
+
+    Context context = new Context();
+    context.setVariable("residentId", event.residentId());
+    context.setVariable("dni", event.dni());
+    context.setVariable("firstName", event.firstName());
+    context.setVariable("lastName", event.lastName());
+    context.setVariable("gender", event.gender());
+    context.setVariable("city", event.city());
+    context.setVariable("country", event.country());
+    context.setVariable("familyMemberId", event.familyMemberId());
+    context.setVariable("familyMemberName", event.familyMemberName());
+    context.setVariable("familyMemberUserId", event.familyMemberUserId());
+
+    // URL opcional hacia el perfil del residente en Vitalia
+    context.setVariable("residentProfileUrl",
+        "https://vitalia.com/residents/" + event.residentId());
+
+    String templateName = "email/residente-creado";
+    String html = templateEngine.process(templateName, context);
+
+    String subject = "Nuevo Residente Registrado en Vitalia: " +
+        event.firstName() + " " + event.lastName();
+
+    // Email de destino: familiar responsable
+    String to = event.familyMemberEmail();
+
+    sendEmailApi(to, subject, html);
+
+    System.out.println("Correo de residente creado enviado a " + to);
   }
 }
