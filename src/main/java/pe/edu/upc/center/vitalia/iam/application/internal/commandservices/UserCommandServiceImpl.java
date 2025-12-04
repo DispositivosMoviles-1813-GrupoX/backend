@@ -9,6 +9,7 @@ import pe.edu.upc.center.vitalia.iam.domain.model.aggregates.User;
 import pe.edu.upc.center.vitalia.iam.domain.model.commands.SignInCommand;
 import pe.edu.upc.center.vitalia.iam.domain.model.commands.SignUpCommand;
 import pe.edu.upc.center.vitalia.iam.domain.model.entities.Role;
+import pe.edu.upc.center.vitalia.iam.domain.model.valueobjects.EmailAddress;
 import pe.edu.upc.center.vitalia.iam.domain.services.UserCommandService;
 import pe.edu.upc.center.vitalia.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import pe.edu.upc.center.vitalia.iam.infrastructure.persistence.jpa.repositories.UserRepository;
@@ -80,11 +81,17 @@ public class UserCommandServiceImpl implements UserCommandService {
   public Optional<User> handle(SignUpCommand command) {
     if (userRepository.existsByUsername(command.username()))
       throw new RuntimeException("Username already exists");
+
+    var email = new EmailAddress(command.emailAddress());
+    if (userRepository.existsByEmail(email))
+      throw new RuntimeException("Email already exists");
+
     var roles = command.roles().stream()
         .map(role ->
             roleRepository.findByName(role.getName())
                 .orElseThrow(() -> new RuntimeException("Role name not found")))
         .toList();
+
     var user = new User(command.username(), hashingService.encode(command.password()), roles, command.emailAddress());
     userRepository.save(user);
 

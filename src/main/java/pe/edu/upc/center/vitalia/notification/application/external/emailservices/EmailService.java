@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import pe.edu.upc.center.vitalia.shared.domain.events.AddedScheduled;
+import pe.edu.upc.center.vitalia.shared.domain.events.ResidentCreatedEvent;
 
 import java.io.IOException;
 
@@ -36,11 +38,11 @@ public class EmailService {
   }
 
   // ============================================================
-  // 📧 Método general para enviar correo con SendGrid API
+  // Método general para enviar correo con SendGrid API
   // ============================================================
   private void sendEmailApi(String to, String subject, String htmlContent) throws IOException {
 
-    Email fromEmail = new Email(from, "MiApp");
+    Email fromEmail = new Email(from, "Vitalia");
     Email toEmail = new Email(to);
 
     Content content = new Content("text/html", htmlContent);
@@ -55,12 +57,12 @@ public class EmailService {
 
     Response response = sg.api(request);
 
-    System.out.println("📤 SendGrid status: " + response.getStatusCode());
-    System.out.println("📤 Body: " + response.getBody());
+    System.out.println("SendGrid status: " + response.getStatusCode());
+    System.out.println("Body: " + response.getBody());
   }
 
   // ============================================================
-  // 📨 1. Email de bienvenida
+  // 1. Email de bienvenida
   // ============================================================
   public void sendWelcomeEmail(String to, String username, String email) throws IOException {
 
@@ -72,15 +74,15 @@ public class EmailService {
     String templateName = "email/bienvenida-usuario";
     String html = templateEngine.process(templateName, context);
 
-    String subject = "¡Bienvenido a MiApp, " + username + "! 🎉";
+    String subject = "¡Bienvenido a Vitalia, " + username + "! 🎉";
 
     sendEmailApi(to, subject, html);
 
-    System.out.println("✅ Correo de bienvenida enviado a " + to);
+    System.out.println("Correo de bienvenida enviado a " + to);
   }
 
   // ============================================================
-  // 📨 2. Email de doctor creado
+  // 2. Email de doctor creado
   // ============================================================
   public void sendDoctorCreatedEmail(
       String to,
@@ -101,15 +103,15 @@ public class EmailService {
     String templateName = "email/doctor-creado";
     String html = templateEngine.process(templateName, context);
 
-    String subject = "Nuevo Doctor Registrado: Dr. " + firstname + " " + lastname;
+    String subject = "Nuevo Doctor Registrado en Vitalia: Dr. " + firstname + " " + lastname;
 
     sendEmailApi(to, subject, html);
 
-    System.out.println("✅ Correo de registro de doctor enviado a " + to);
+    System.out.println("Correo de registro de doctor enviado a " + to);
   }
 
   // ============================================================
-  // 📨 3. Email de familiar creado
+  // 3. Email de familiar creado
   // ============================================================
   public void sendFamilyMemberCreatedEmail(
       String to,
@@ -126,9 +128,66 @@ public class EmailService {
     String templateName = "email/familiar-creado";
     String html = templateEngine.process(templateName, context);
 
-    String subject = "Nuevo Familiar Registrado: " + firstname + " " + lastname;
+    String subject = "Nuevo Familiar Registrado en Vitalia: " + firstname + " " + lastname;
 
     sendEmailApi(to, subject, html);
-    System.out.println("✅ Correo de registro de familiar enviado a " + to);
+    System.out.println("Correo de registro de familiar enviado a " + to);
+  }
+
+  // ============================================================
+  // 4. Email de horario añadido
+  // ============================================================
+  public void sendScheduleAddedEmail(AddedScheduled event) throws IOException {
+
+    Context context = new Context();
+    context.setVariable("doctorId", event.doctorId());
+    context.setVariable("day", event.day());
+    context.setVariable("startTime", event.startTime());
+    context.setVariable("endTime", event.endTime());
+    context.setVariable("appointmentId", event.appointmentId());
+
+    String templateName = "email/horario-añadido";
+    String html = templateEngine.process(templateName, context);
+
+    String subject = "Nuevo Horario Registrado en Vitalia (Doctor ID: " + event.doctorId() + ")";
+
+    sendEmailApi(event.emailAddress(), subject, html);
+
+    System.out.println("Correo de horario añadido enviado a " + event.emailAddress());
+  }
+
+  // ============================================================
+  // 5. Email de residente creado
+  // ============================================================
+  public void sendResidentCreatedEmail(ResidentCreatedEvent event) throws IOException {
+
+    Context context = new Context();
+    context.setVariable("residentId", event.residentId());
+    context.setVariable("dni", event.dni());
+    context.setVariable("firstName", event.firstName());
+    context.setVariable("lastName", event.lastName());
+    context.setVariable("gender", event.gender());
+    context.setVariable("city", event.city());
+    context.setVariable("country", event.country());
+    context.setVariable("familyMemberId", event.familyMemberId());
+    context.setVariable("familyMemberName", event.familyMemberName());
+    context.setVariable("familyMemberUserId", event.familyMemberUserId());
+
+    // URL opcional hacia el perfil del residente en Vitalia
+    context.setVariable("residentProfileUrl",
+        "https://vitalia.com/residents/" + event.residentId());
+
+    String templateName = "email/residente-creado";
+    String html = templateEngine.process(templateName, context);
+
+    String subject = "Nuevo Residente Registrado en Vitalia: " +
+        event.firstName() + " " + event.lastName();
+
+    // Email de destino: familiar responsable
+    String to = event.familyMemberEmail();
+
+    sendEmailApi(to, subject, html);
+
+    System.out.println("Correo de residente creado enviado a " + to);
   }
 }

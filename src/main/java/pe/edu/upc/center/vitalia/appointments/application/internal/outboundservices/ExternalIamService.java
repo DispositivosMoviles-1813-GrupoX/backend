@@ -1,9 +1,9 @@
-package pe.edu.upc.center.vitalia.users.application.internal.outboundservices;
+package pe.edu.upc.center.vitalia.appointments.application.internal.outboundservices;
 
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.iam.interfaces.acl.IamContextFacade;
 
-@Service("externalIamServiceUsers")
+@Service("externalIamServiceAppointments")
 public class ExternalIamService {
   private final IamContextFacade iamContextFacade;
 
@@ -11,15 +11,7 @@ public class ExternalIamService {
     this.iamContextFacade = iamContextFacade;
   }
 
-  public String getDoctorEmail(Long userId) {
+  public String fetchEmailByUserId(Long userId) {
     return iamContextFacade.fetchEmailByUserId( userId);
-  }
-
-  public boolean existsByUserId(Long userId) {
-    return iamContextFacade.existsByUserId(userId);
-  }
-
-  public Long fetchUserIdByEmail(String email) {
-    return iamContextFacade.fetchUserIdByEmail(email);
   }
 }

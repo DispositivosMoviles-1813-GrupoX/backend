@@ -13,6 +13,10 @@ import java.time.LocalTime;
 public class CreateAppointmentCommandFromResourceAssembler {
 
     public static CreateAppointmentCommand toCommandFromResource(CreateAppointmentResource resource) {
+      if (resource.date() == null || resource.time() == null) {
+        throw new IllegalArgumentException("Date and time are required");
+      }
+
         ResidentId residentId = new ResidentId(resource.residentId());
         DoctorId doctorId = new DoctorId(resource.doctorId());
         DateTime dateTime = new DateTime(LocalDate.of(resource.date().getYear(), resource.date().getMonthValue(), resource.date().getDayOfMonth()),

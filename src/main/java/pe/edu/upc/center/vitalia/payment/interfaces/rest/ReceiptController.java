@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 @RestController
 @RequestMapping(value = "/api/v1/receipts", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Receipts", description = "Receipt Management Endpoints")

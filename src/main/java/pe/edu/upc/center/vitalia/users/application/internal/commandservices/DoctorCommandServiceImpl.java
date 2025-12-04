@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.iam.interfaces.acl.IamContextFacade;
+import pe.edu.upc.center.vitalia.shared.domain.events.AddedScheduled;
 import pe.edu.upc.center.vitalia.shared.domain.events.DoctorCreatedEvent;
 import pe.edu.upc.center.vitalia.users.application.internal.outboundservices.ExternalIamService;
 import pe.edu.upc.center.vitalia.users.domain.model.aggregates.Doctor;
@@ -86,7 +87,21 @@ public class DoctorCommandServiceImpl implements DoctorCommandService {
     public Doctor addSchedule(Long doctorId, ScheduleResource resource) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new EntityNotFoundException("Doctor not found with id " + doctorId));
+
         Schedule schedule = new Schedule(null, resource.day(), resource.startTime(), resource.endTime(), resource.appointmentId());
+      var doctorEmail = externalIamService.getDoctorEmail(doctorId);
+      var doctorUserId = externalIamService.fetchUserIdByEmail(doctorEmail);
+
+      var event = new AddedScheduled(
+          doctorId,
+          resource.day(),
+          resource.startTime(),
+          resource.endTime(),
+          resource.appointmentId(),
+          doctorEmail,
+          doctorUserId);
+      publisher.publishEvent(event);
+
         doctor.getSchedules().add(schedule);
         return doctorRepository.save(doctor);
     }
