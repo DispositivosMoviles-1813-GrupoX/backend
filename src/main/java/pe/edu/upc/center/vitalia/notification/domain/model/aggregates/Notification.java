@@ -43,6 +43,13 @@ public class Notification extends AuditableAbstractAggregateRoot<Notification> {
     this.notificationStatus = NotificationStatus.UNREAD;
   }
 
+  public Notification(CreateNotificationCommand command, NotificationStatus alert) {
+    this.title = command.title();
+    this.content = command.content();
+    this.userId = new UserId(command.userId());
+    this.notificationStatus = NotificationStatus.ALERT;
+  }
+
   private void validateFields(String title, String content, Long userId) {
     if (title == null || title.trim().isEmpty()) {
       throw new IllegalArgumentException("Title cannot be null or empty");

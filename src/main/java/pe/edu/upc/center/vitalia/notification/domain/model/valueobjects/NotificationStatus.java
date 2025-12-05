@@ -4,5 +4,6 @@ public enum NotificationStatus {
   READ,
   UNREAD,
   ARCHIVED,
-  UNARCHIVED
+  UNARCHIVED,
+  ALERT
 }
