@@ -11,4 +11,5 @@ public interface NotificationCommandService {
   void handle(DeleteNotificationCommand command);
   Optional<Notification> handle(UpdateStatusToReadCommand command);
   Optional<Notification> handle(UpdateStatusToArchivedCommand command);
+  Optional<Notification> alert(CreateNotificationCommand command);
 }

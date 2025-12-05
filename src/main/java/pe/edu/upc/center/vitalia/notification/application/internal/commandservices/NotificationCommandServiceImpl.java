@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.notification.domain.model.aggregates.Notification;
 import pe.edu.upc.center.vitalia.notification.domain.model.commands.*;
+import pe.edu.upc.center.vitalia.notification.domain.model.valueobjects.NotificationStatus;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationCommandService;
 import pe.edu.upc.center.vitalia.notification.infrastructure.persistence.jpa.repositories.NotificationRepository;
 
@@ -72,5 +73,14 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
     notificationRepository.save(updatedNotification);
 
     return Optional.of(updatedNotification);
+  }
+
+  @Override
+  public Optional<Notification> alert(CreateNotificationCommand command) {
+    var statusAlert = NotificationStatus.ALERT;
+    var notification = new Notification(command, statusAlert);
+    notificationRepository.save(notification);
+
+    return Optional.of(notification);
   }
 }

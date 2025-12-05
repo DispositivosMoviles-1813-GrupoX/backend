@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import pe.edu.upc.center.vitalia.notification.application.external.emailservices.EmailService;
 import pe.edu.upc.center.vitalia.notification.domain.model.commands.CreateNotificationCommand;
 import pe.edu.upc.center.vitalia.notification.domain.services.NotificationCommandService;
+import pe.edu.upc.center.vitalia.shared.domain.events.AddedScheduled;
 import pe.edu.upc.center.vitalia.shared.domain.events.DoctorCreatedEvent;
 import pe.edu.upc.center.vitalia.shared.domain.events.FamilyMemberCreatedEvent;
 
@@ -114,6 +115,52 @@ public class UsersEventHandler {
         event.firstName(),
         event.lastName(),
         event.relationship()
+    );
+
+    return new CreateNotificationCommand(title, content, event.userId());
+  }
+
+  // ============================================================
+  // 📨 3. Evento de horario añadido
+  // ============================================================
+  @EventListener
+  @Async
+  public void handleAddedSchedule(AddedScheduled event) {
+    try {
+
+      // Envío del correo usando el nuevo método
+      emailService.sendScheduleAddedEmail(event);
+
+      // Crear notificación
+      var createNotificationCommand = getCreateNotificationCommandByAddedSchedule(event);
+      var result = notificationCommandService.handle(createNotificationCommand);
+
+      if (result.isPresent()) {
+        System.out.println(" Notificación de horario creada exitosamente: " + result.get().getId());
+      } else {
+        System.err.println(" No se pudo crear la notificación de horario");
+      }
+
+    } catch (IOException e) {
+      System.err.println("Error al enviar correo de horario añadido: " + e.getMessage());
+    } catch (Exception e) {
+      System.err.println("Error al crear notificación de horario añadido: " + e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+  private CreateNotificationCommand getCreateNotificationCommandByAddedSchedule(AddedScheduled event) {
+
+    String title = "Nuevo horario añadido para el Doctor (ID: " + event.doctorId() + ")";
+
+    String content = String.format(
+        "Se ha registrado un nuevo horario para el doctor con ID %d. "
+            + "Día: %s. Hora de inicio: %s. Hora de fin: %s. ID de la cita generada: %d.",
+        event.doctorId(),
+        event.day(),
+        event.startTime(),
+        event.endTime(),
+        event.appointmentId()
     );
 
     return new CreateNotificationCommand(title, content, event.userId());

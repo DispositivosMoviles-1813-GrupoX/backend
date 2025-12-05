@@ -3,8 +3,10 @@ package pe.edu.upc.center.vitalia.iam.application.internal.queryservices;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.center.vitalia.iam.domain.model.aggregates.User;
 import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetAllUsersQuery;
+import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByEmailQuery;
 import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByIdQuery;
 import pe.edu.upc.center.vitalia.iam.domain.model.queries.GetUserByUsernameQuery;
+import pe.edu.upc.center.vitalia.iam.domain.model.valueobjects.EmailAddress;
 import pe.edu.upc.center.vitalia.iam.domain.services.UserQueryService;
 import pe.edu.upc.center.vitalia.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 
@@ -58,5 +60,11 @@ public class UserQueryServiceImpl implements UserQueryService {
   @Override
   public Optional<User> handle(GetUserByUsernameQuery query) {
     return userRepository.findByUsername(query.username());
+  }
+
+  @Override
+  public Optional<User> handle(GetUserByEmailQuery query) {
+    var email = new EmailAddress(query.email());
+    return this.userRepository.findByEmail(email);
   }
 }

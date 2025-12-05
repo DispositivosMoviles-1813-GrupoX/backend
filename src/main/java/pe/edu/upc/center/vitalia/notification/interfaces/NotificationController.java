@@ -99,6 +99,19 @@ public class NotificationController {
     return new ResponseEntity<>(notificationResource, HttpStatus.CREATED);
   }
 
+  @PostMapping("/alert")
+  @Operation(summary = "Create a notification alert", description = "Create a new notification")
+  public ResponseEntity<NotificationResource> createNotificationAlert(
+      @RequestBody CreateNotificationResource resource) {
+    var createNotificationCommand = CreateNotificationCommandFromResourceAssembler.toCommandFromResource(resource);
+    var notification = notificationCommandService.alert(createNotificationCommand);
+    if (notification.isEmpty()) {
+      return ResponseEntity.badRequest().build();
+    }
+    var notificationResource = NotificationResourceFromEntityAssembler.toResourceFromEntity(notification.get());
+    return new ResponseEntity<>(notificationResource, HttpStatus.CREATED);
+  }
+
   @PostMapping("/{id}/mark-as-read")
   @Operation(summary = "Mark notification as read", description = "Mark a specific notification as read by its ID")
   public ResponseEntity<NotificationResource> markAsRead(@PathVariable Long id) {

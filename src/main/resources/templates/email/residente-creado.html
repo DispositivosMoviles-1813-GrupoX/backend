@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Nuevo Residente Registrado - Vitalia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        :root {
+            --vitalia-green: #28a745;
+            --vitalia-soft: #e8f5e9;
+            --bg: #f3f4f6;
+            --text: #333;
+            --muted: #7a7a7a;
+            --card-radius: 14px;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing:antialiased;
+        }
+
+        .email-wrap {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: var(--card-radius);
+            padding: 28px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+            border-left: 6px solid var(--vitalia-green);
+        }
+
+        .brand {
+            display:flex;
+            align-items:center;
+            gap:12px;
+            margin-bottom: 18px;
+        }
+
+        .brand-title {
+            font-size:18px;
+            font-weight:700;
+            color:var(--vitalia-green);
+        }
+
+        h1 {
+            font-size:22px;
+            margin: 8px 0 14px 0;
+            color:var(--vitalia-green);
+        }
+
+        p.lead {
+            margin:0 0 18px 0;
+            font-size:15px;
+            color: #404040;
+            line-height:1.6;
+        }
+
+        .grid {
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            gap:12px;
+            margin-top:6px;
+        }
+
+        .info {
+            background: var(--vitalia-soft);
+            border: 1px solid #c8e6c9;
+            padding:12px;
+            border-radius:10px;
+        }
+
+        .info b {
+            color: var(--vitalia-green);
+            display:inline-block;
+            min-width:120px;
+        }
+
+        .section-title {
+            margin:18px 0 8px 0;
+            font-weight:700;
+            color: #2f6f3a;
+            font-size:14px;
+        }
+
+        .family {
+            background: linear-gradient(180deg, #ffffff 0%, #fafdfb 100%);
+            padding:12px;
+            border-radius:10px;
+            border:1px solid #e6f2e7;
+        }
+
+        .cta {
+            display:inline-block;
+            margin-top:18px;
+            padding:12px 22px;
+            background: var(--vitalia-green);
+            color:#fff !important;
+            text-decoration:none;
+            border-radius:10px;
+            font-weight:600;
+            box-shadow: 0 6px 18px rgba(40,167,69,0.12);
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size:13px;
+            margin-top:18px;
+            line-height:1.5;
+        }
+
+        .footer {
+            text-align:center;
+            color: #999;
+            font-size:12px;
+            margin-top:18px;
+        }
+
+        /* Responsive */
+        @media (max-width:540px) {
+            .grid { grid-template-columns: 1fr; }
+            .brand { gap:10px; }
+            h1 { font-size:20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="email-wrap">
+    <div class="card">
+
+        <!-- header / marca -->
+        <div class="brand">
+            <div>
+                <div class="brand-title">Vitalia</div>
+                <div style="font-size:12px;color:var(--muted);">Plataforma de gestión médica</div>
+            </div>
+        </div>
+
+        <h1>Nuevo residente registrado ✅</h1>
+
+        <p class="lead">
+            Se ha creado un nuevo perfil de residente en Vitalia. Abajo tienes los datos principales del registro.
+        </p>
+
+        <!-- Datos principales -->
+        <div class="section-title">Datos del residente</div>
+        <div class="grid" role="table" aria-label="Datos del residente">
+            <div class="info" role="row">
+                <p><b>ID:</b> [[${residentId}]]</p>
+                <p><b>DNI:</b> [[${dni}]]</p>
+                <p><b>Nombre:</b> [[${firstName}]] [[${lastName}]]</p>
+            </div>
+
+            <div class="info" role="row">
+                <p><b>Género:</b> [[${gender}]]</p>
+                <p><b>Ciudad:</b> [[${city}]]</p>
+                <p><b>País:</b> [[${country}]]</p>
+            </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="section-title">Contacto familiar / representante</div>
+        <div class="family">
+            <p><b>Familiar ID:</b> [[${familyMemberId}]]</p>
+            <p><b>Nombre del familiar:</b> [[${familyMemberName}]]</p>
+            <p><b>Usuario (user id):</b> [[${familyMemberUserId}]]</p>
+        </div>
+
+        <!-- CTA -->
+        <a class="cta" href="[[${residentProfileUrl}]]" target="_blank" rel="noopener">Ver perfil del residente</a>
+
+        <p class="muted">
+            Si no reconoces esta acción, por favor revisa el registro o contacta al equipo de soporte de Vitalia.
+        </p>
+
+        <div class="footer">
+            © 2025 Vitalia — Cuidado Médico Inteligente. Todos los derechos reservados.
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -15,7 +15,7 @@ import pe.edu.upc.center.vitalia.users.interfaces.rest.transform.DoctorResourceA
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
+
 @RestController
 @RequestMapping("/api/v1/doctors")
 @Tag(name = "Doctors", description = "Operations related to Doctors")

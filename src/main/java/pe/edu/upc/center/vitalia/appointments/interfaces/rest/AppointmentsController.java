@@ -22,7 +22,6 @@ import pe.edu.upc.center.vitalia.appointments.interfaces.rest.transform.UpdateAp
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 @RestController
 @RequestMapping(value = "/api/v1/appointments", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Appointments", description = "Appointment Management Endpoints")

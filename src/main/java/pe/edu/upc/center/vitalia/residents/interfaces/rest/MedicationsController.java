@@ -15,7 +15,7 @@ import pe.edu.upc.center.vitalia.residents.interfaces.rest.resources.MedicationR
 
 import java.util.List;
 
-@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
+
 @RestController
 @RequestMapping("/api/v1/residents/{residentId}/medications")
 @Tag(name = "Medications", description = "Medication Management Endpoints")
