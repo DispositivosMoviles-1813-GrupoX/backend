@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 
-@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
+
 @RestController
 @RequestMapping("/api/v1/residents/{residentId}/mental-health-records")
 @Tag(name = "Mental Health Records", description = "Resident Mental Health Record Management Endpoints")

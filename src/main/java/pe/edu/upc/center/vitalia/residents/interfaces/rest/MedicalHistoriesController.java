@@ -15,7 +15,7 @@ import pe.edu.upc.center.vitalia.residents.interfaces.rest.resources.MedicalHist
 import java.util.Date;
 import java.util.List;
 
-@CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
+
 @RestController
 @RequestMapping("/api/v1/residents/{residentId}/medical-histories")
 @Tag(name = "Medical Histories", description = "Resident Medical History Management Endpoints")
